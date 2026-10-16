@@ -1179,12 +1179,16 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
   border-radius: 9999px !important;
 }
 
-/* Auth pitch simplify in simulator */
-.mobile-simulator-viewport .auth-pitch-col .yellow-postit,
-.mobile-app-container .auth-pitch-col .yellow-postit,
-.mobile-simulator-viewport .auth-pitch-col .polaroid-card,
-.mobile-app-container .auth-pitch-col .polaroid-card {
+/* Hide entire auth pitch column on mobile view - show only Google and email/password login card */
+.mobile-simulator-viewport .auth-pitch-col,
+.mobile-app-container .auth-pitch-col {
   display: none !important;
+}
+.mobile-simulator-viewport .auth-card-col > div,
+.mobile-app-container .auth-card-col > div {
+  padding: 22px 16px !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Corkboard Canvas in simulator */
@@ -1369,9 +1373,14 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
     border-radius: 9999px !important;
   }
 
-  .auth-pitch-col .yellow-postit,
-  .auth-pitch-col .polaroid-card {
+  /* Hide entire auth pitch column on mobile view - show only Google and email/password login card */
+  .auth-pitch-col {
     display: none !important;
+  }
+  .auth-card-col > div {
+    padding: 22px 16px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
   }
 
   .triangle-corkboard-canvas {
