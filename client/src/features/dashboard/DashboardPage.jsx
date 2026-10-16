@@ -49,7 +49,7 @@ export const DashboardPage = () => {
       <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
         
         {/* Top Bento Header */}
-        <div style={{
+        <div className="dashboard-top-bento" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: '24px',
@@ -98,7 +98,7 @@ export const DashboardPage = () => {
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
+            <div className="dashboard-welcome-actions" style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
               <Link
                 to="/match"
                 style={{
@@ -186,7 +186,7 @@ export const DashboardPage = () => {
         </div>
 
         {/* STATS BENTO ROW (4 TACTILE STICKER CARDS) */}
-        <div style={{
+        <div className="stats-bento-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '18px',
@@ -270,7 +270,7 @@ export const DashboardPage = () => {
         </div>
 
         {/* TWO-COLUMN MAIN WORKSPACE */}
-        <div style={{
+        <div className="dashboard-main-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: '28px',

@@ -74,7 +74,7 @@ export const Navbar = () => {
   };
 
   return (
-    <header style={{
+    <header className="app-navbar-header" style={{
       height: 'var(--top-nav-height)',
       borderBottom: '2px solid rgba(0, 135, 68, 0.4)',
       background: 'rgba(14, 44, 30, 0.96)',
@@ -85,6 +85,7 @@ export const Navbar = () => {
       display: 'flex',
       alignItems: 'center',
       padding: '0 20px',
+      flexShrink: 0,
       boxShadow: '0 4px 20px rgba(0,0,0,0.35)'
     }}>
       <div style={{

@@ -102,6 +102,7 @@ export const StudentProfilePage = () => {
               
               {/* Star Doodle in Crayon Behind Photo */}
               <svg
+                className="star-doodle"
                 viewBox="0 0 100 100"
                 style={{
                   position: 'absolute',
@@ -265,7 +266,7 @@ export const StudentProfilePage = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px', position: 'relative' }}>
                 
                 {/* Hand-drawn Arrow: "Let's swap!" */}
-                <div style={{
+                <div className="profile-decor-arrow" style={{
                   position: 'absolute',
                   top: '100px',
                   right: '70px',

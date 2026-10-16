@@ -174,7 +174,7 @@ export const SettingsProfilePage = () => {
             gap: '24px'
           }}>
             {/* Navigation Tabs (Span 4) */}
-            <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="settings-tabs-container" style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
                 { id: 'profile', label: 'Edit Profile', icon: User },
                 { id: 'skills', label: 'Skills & Mastery', icon: Sparkles },

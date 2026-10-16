@@ -121,7 +121,7 @@ export const LoginPage = () => {
             alignItems: 'center'
           }}>
             {/* Left Column: Branding, Polaroid & Pulse Post-It */}
-            <div style={{ gridColumn: 'span 6' }}>
+            <div className="auth-pitch-col" style={{ gridColumn: 'span 6' }}>
               <div style={{ marginBottom: '14px' }}>
                 <span className="sticker-badge sticker-badge-exp" style={{ fontSize: '0.8rem', padding: '4px 14px' }}>
                   LEVEL UP TOGETHER ⚡
@@ -176,7 +176,7 @@ export const LoginPage = () => {
             </div>
 
             {/* Right Column: Physical Paper Login Card */}
-            <div style={{ gridColumn: 'span 6' }}>
+            <div className="auth-card-col" style={{ gridColumn: 'span 6' }}>
               <div style={{
                 background: '#FFFFFF',
                 border: '3px solid #1E3A8A',

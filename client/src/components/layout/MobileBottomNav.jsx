@@ -28,6 +28,7 @@ export const MobileBottomNav = () => {
         left: 0,
         right: 0,
         height: 'var(--bottom-nav-height)',
+        flexShrink: 0,
         background: 'rgba(14, 44, 30, 0.98)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',

@@ -154,7 +154,7 @@ export const SignupPage = () => {
             alignItems: 'center'
           }}>
             {/* Left Column: Scrapbook Pitch & Post-it Notes */}
-            <div style={{ gridColumn: 'span 6' }}>
+            <div className="auth-pitch-col" style={{ gridColumn: 'span 6' }}>
               <div style={{ marginBottom: '14px' }}>
                 <span className="sticker-badge sticker-badge-exp" style={{ fontSize: '0.8rem', padding: '4px 14px' }}>
                   JOIN 2,400+ SWAPPERS ⚡
@@ -220,7 +220,7 @@ export const SignupPage = () => {
             </div>
 
             {/* Right Column: Physical Paper Card Form */}
-            <div style={{ gridColumn: 'span 6' }}>
+            <div className="auth-card-col" style={{ gridColumn: 'span 6' }}>
               <div style={{
                 background: '#FFFFFF',
                 border: '3px solid #1E3A8A',

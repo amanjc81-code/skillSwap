@@ -60,7 +60,7 @@ export const LandingPage = () => {
           {/* =========================================================================
               HERO TOP: GREETING & ENVELOPE & POLAROID TRIANGLE
               ========================================================================= */}
-          <div style={{
+          <div className="landing-hero-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: '28px',
@@ -69,7 +69,7 @@ export const LandingPage = () => {
           }}>
             
             {/* Left Column: Bold Expressive Headline & Post-It Pitch */}
-            <div style={{ gridColumn: 'span 6' }}>
+            <div className="landing-hero-left" style={{ gridColumn: 'span 6' }}>
               
               {/* Sticker Badge */}
               <div style={{ marginBottom: '14px' }}>
@@ -123,7 +123,7 @@ export const LandingPage = () => {
               </p>
 
               {/* CTAs */}
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginBottom: '32px' }}>
+              <div className="landing-cta-row" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginBottom: '32px' }}>
                 <Link
                   to="/signup"
                   style={{
@@ -180,7 +180,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Right Column: Tactile Pinned Triangle Diagram (The Hero Canvas) */}
-            <div style={{ gridColumn: 'span 6', position: 'relative' }}>
+            <div className="landing-hero-right" style={{ gridColumn: 'span 6', position: 'relative' }}>
               
               {/* Manila Envelope at Top Right */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px', position: 'relative' }}>
@@ -209,7 +209,7 @@ export const LandingPage = () => {
               </div>
 
               {/* TACTILE CORKBOARD / STRING TRIANGLE CANVAS */}
-              <div style={{
+              <div className="triangle-corkboard-canvas" style={{
                 position: 'relative',
                 background: '#F7F3E3',
                 border: '2px dashed #C5BC98',

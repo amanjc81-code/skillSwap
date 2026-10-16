@@ -105,17 +105,33 @@ const AppContent = () => {
           📱 <strong>Mobile Simulator View (iPhone 16 Pro mockup)</strong> • Tap <strong>Desktop View</strong> in the bottom right to expand ✍️
         </div>
 
-        {/* Mobile Viewport Bezel */}
-        <div className="mobile-simulator-viewport" style={{ boxShadow: '0 25px 60px rgba(0,0,0,0.8), 0 0 0 4px #27272A' }}>
+        {/* Mobile Viewport Bezel (iPhone 16 Pro 395px x 844px) */}
+        <div className="mobile-simulator-viewport" style={{
+          width: '100%',
+          maxWidth: '395px',
+          height: '844px',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.8), 0 0 0 4px #27272A',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative'
+        }}>
           {/* Dynamic Island */}
           <div className="mobile-island">
             <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#111' }} />
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#222' }} />
           </div>
 
-          <div style={{ minHeight: '880px', display: 'flex', flexDirection: 'column', background: '#123e2a' }}>
+          <div className="mobile-app-container" style={{
+            flex: 1,
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#081C13',
+            overflow: 'hidden',
+            position: 'relative'
+          }}>
             <Navbar />
-            <div style={{ flex: 1, paddingBottom: '70px' }}>
+            <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '76px' }}>
               <AppRoutes />
             </div>
             <MobileBottomNav />
