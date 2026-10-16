@@ -51,4 +51,9 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Only listen on port in standalone/local mode. Vercel executes the exported Express handler.
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
