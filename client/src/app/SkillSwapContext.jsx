@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { BASE_URL } from '../lib/api.js';
 
 const SkillSwapContext = createContext(null);
 
@@ -377,7 +378,7 @@ export const SkillSwapProvider = ({ children }) => {
 
       // Call backend reset API
       try {
-        await fetch('/api/v1/reset-database', { method: 'POST' });
+        await fetch(`${BASE_URL}/reset-database`, { method: 'POST' });
       } catch (e) {
         // Safe if backend is offline
       }
