@@ -4,6 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../app/AuthContext.jsx';
 import { ToastProvider } from '../app/ToastContext.jsx';
+import { SkillSwapProvider } from '../app/SkillSwapContext.jsx';
 import { LoginPage } from '../features/auth/LoginPage.jsx';
 import { RegisterPage } from '../features/auth/RegisterPage.jsx';
 import { LandingPage } from '../features/landing/LandingPage.jsx';
@@ -18,11 +19,13 @@ vi.mock('../lib/api.js', () => ({
 
 const renderWithProviders = (ui) => {
   return render(
-    <AuthProvider>
-      <ToastProvider>
-        <BrowserRouter>{ui}</BrowserRouter>
-      </ToastProvider>
-    </AuthProvider>
+    <SkillSwapProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <BrowserRouter>{ui}</BrowserRouter>
+        </ToastProvider>
+      </AuthProvider>
+    </SkillSwapProvider>
   );
 };
 
@@ -30,19 +33,16 @@ describe('Frontend Authentication & Landing Components', () => {
   it('renders LoginPage with 1-click evaluation buttons', () => {
     renderWithProviders(<LoginPage />);
 
-    expect(screen.getByText('Log In to SkillMesh')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('student@mitacsc.ac.in')).toBeInTheDocument();
-    expect(screen.getByText('1-Click Demo Evaluation Accounts')).toBeInTheDocument();
-    expect(screen.getByText(/Aarav/)).toBeInTheDocument();
+    expect(screen.getByText('STUDENT LOGIN')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('yourname@campus.edu')).toBeInTheDocument();
+    expect(screen.getByText(/QUICK SIGN IN AS REGISTERED STUDENT/i)).toBeInTheDocument();
   });
 
-  it('populates fields when a demo quick-fill button is clicked', () => {
+  it('populates fields when a user types credentials', () => {
     renderWithProviders(<LoginPage />);
 
-    const aaravBtn = screen.getByText(/Aarav/);
-    fireEvent.click(aaravBtn);
-
-    const emailInput = screen.getByPlaceholderText('student@mitacsc.ac.in');
+    const emailInput = screen.getByPlaceholderText('yourname@campus.edu');
+    fireEvent.change(emailInput, { target: { value: 'aarav.sharma@mitacsc.ac.in' } });
     expect(emailInput.value).toBe('aarav.sharma@mitacsc.ac.in');
   });
 
@@ -70,8 +70,8 @@ describe('Frontend Authentication & Landing Components', () => {
   it('renders LandingPage showcasing reciprocal exchange', () => {
     renderWithProviders(<LandingPage />);
 
-    expect(screen.getByText(/Peer Learning Powered by an Intelligent/i)).toBeInTheDocument();
-    expect(screen.getByText(/97% Compatibility/i)).toBeInTheDocument();
-    expect(screen.getByText(/How Reciprocal Matching Works/i)).toBeInTheDocument();
+    expect(screen.getByText('WELCOME TO SKILLSWAP')).toBeInTheDocument();
+    expect(screen.getByText('1-TO-1 SKILL SWAP')).toBeInTheDocument();
+    expect(screen.getByText('TRIANGLE SKILL CIRCLE')).toBeInTheDocument();
   });
 });

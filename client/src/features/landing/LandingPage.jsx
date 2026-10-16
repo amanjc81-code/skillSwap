@@ -28,20 +28,24 @@ export const LandingPage = () => {
       <div style={{ maxWidth: '1180px', margin: '0 auto', position: 'relative' }}>
         
         {/* Top Zine Badge */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', padding: '0 8px' }}>
           <div style={{
             background: '#FEF08A',
             border: '2px solid #EAB308',
             borderRadius: '4px',
-            padding: '6px 18px',
-            transform: 'rotate(-2deg)',
+            padding: '6px 14px',
+            transform: 'rotate(-1.5deg)',
             boxShadow: '0 8px 16px rgba(0,0,0,0.25)',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: '8px',
+            maxWidth: '100%',
+            textAlign: 'center'
           }}>
             <span style={{ fontSize: '1rem' }}>📌</span>
-            <span style={{ fontFamily: 'var(--font-dela)', fontSize: '0.85rem', color: '#854D0E' }}>
+            <span style={{ fontFamily: 'var(--font-dela)', fontSize: 'clamp(0.68rem, 2.5vw, 0.85rem)', color: '#854D0E', lineHeight: 1.3 }}>
               CAMPUS PEER-TO-PEER SKILL EXCHANGE • NO MONEY. JUST SKILLS.
             </span>
           </div>
@@ -211,6 +215,9 @@ export const LandingPage = () => {
                 border: '2px dashed #C5BC98',
                 borderRadius: '8px',
                 padding: '30px 14px',
+                minHeight: '300px',
+                width: '100%',
+                overflow: 'hidden',
                 boxShadow: 'inset 0 0 20px rgba(0,0,0,0.06)'
               }}>
                 <svg viewBox="0 0 460 320" style={{ width: '100%', height: 'auto', overflow: 'visible' }}>

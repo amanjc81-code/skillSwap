@@ -64,7 +64,7 @@ export const ScreenNavigator = () => {
   return (
     <>
       {/* Floating Navigator Bar (Bottom-Right) */}
-      <div style={{
+      <div className="floating-screen-navigator" style={{
         position: 'fixed',
         bottom: '24px',
         right: '24px',

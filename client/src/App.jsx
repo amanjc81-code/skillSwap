@@ -125,11 +125,11 @@ const AppContent = () => {
     );
   }
 
-  // Fluid Desktop View
+  // Fluid Desktop View (Responsive on all devices: Desktop, Tablet, Mobile)
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', width: '100%', overflowX: 'hidden' }}>
       <Navbar />
-      <main style={{ flex: 1 }}>
+      <main className="app-main-content" style={{ flex: 1, width: '100%', overflowX: 'hidden' }}>
         <AppRoutes />
       </main>
       <MobileBottomNav />

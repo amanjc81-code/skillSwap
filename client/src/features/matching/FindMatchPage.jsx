@@ -201,10 +201,10 @@ export const FindMatchPage = () => {
             </a>
           </div>
         ) : (
-          <div style={{
+          <div className="match-cards-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-            gap: '28px'
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
+            gap: '24px'
           }}>
             {filteredStudents.map((student, idx) => {
               const isPerfect = student.matchType === 'Perfect Match';

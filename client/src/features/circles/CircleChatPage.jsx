@@ -286,7 +286,8 @@ export const CircleChatPage = () => {
             {/* PROGRESS SIDE PANEL: Post-it Card */}
             {showProgressDrawer && (
               <div className="yellow-postit" style={{
-                width: '320px',
+                width: 'min(320px, 100%)',
+                maxWidth: '100%',
                 padding: '24px 20px',
                 display: 'flex',
                 flexDirection: 'column',

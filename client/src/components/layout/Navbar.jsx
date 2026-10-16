@@ -112,10 +112,10 @@ export const Navbar = () => {
             <ArrowRightLeft size={20} color="#FFFFFF" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontFamily: 'var(--font-dela)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '0.02em', color: '#FFF' }}>
+            <span className="navbar-brand-title" style={{ fontFamily: 'var(--font-dela)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '0.02em', color: '#FFF' }}>
               SKILL<span style={{ color: '#FACC15' }}>SWAP</span>
             </span>
-            <span style={{ fontSize: '0.65rem', color: '#A7F3D0', fontFamily: 'var(--font-hand)', fontWeight: 700, marginTop: '-4px' }}>
+            <span className="navbar-brand-subtitle" style={{ fontSize: '0.65rem', color: '#A7F3D0', fontFamily: 'var(--font-hand)', fontWeight: 700, marginTop: '-4px' }}>
               Campus Zine & Peer Learning ✍️
             </span>
           </div>
@@ -407,6 +407,7 @@ export const Navbar = () => {
                       top: 'calc(100% + 12px)',
                       right: 0,
                       width: '285px',
+                      maxWidth: 'calc(100vw - 24px)',
                       background: '#FBF8EE',
                       border: '2px solid #27272A',
                       borderRadius: '12px',

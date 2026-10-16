@@ -106,9 +106,9 @@ export const StudentProfilePage = () => {
                 style={{
                   position: 'absolute',
                   top: '-15px',
-                  right: '-15px',
-                  width: '90px',
-                  height: '90px',
+                  right: '0px',
+                  width: '80px',
+                  height: '80px',
                   zIndex: 5,
                   transform: 'rotate(15deg)',
                   pointerEvents: 'none'
@@ -126,8 +126,8 @@ export const StudentProfilePage = () => {
               {/* QR Code Sticker: GitHub / Campus ID */}
               <div style={{
                 position: 'absolute',
-                top: '-35px',
-                left: '-15px',
+                top: '-25px',
+                left: '0px',
                 zIndex: 35,
                 background: '#FFFFFF',
                 padding: '6px 8px 8px 8px',
