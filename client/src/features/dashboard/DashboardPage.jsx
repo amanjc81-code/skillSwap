@@ -193,78 +193,86 @@ export const DashboardPage = () => {
           marginBottom: '32px'
         }}>
           {/* Stat 1 */}
-          <div style={{
+          <div className="stat-card" style={{
             background: '#FFFFFF',
             border: '2px solid #007A3D',
             borderRadius: '6px',
             padding: '18px 20px',
-            boxShadow: '0 6px 14px rgba(0,0,0,0.1)'
+            boxShadow: '0 6px 14px rgba(0,0,0,0.1)',
+            minWidth: 0,
+            overflow: 'hidden'
           }}>
             <span className="sticker-badge sticker-badge-exp" style={{ fontSize: '0.7rem', padding: '2px 8px', marginBottom: '6px' }}>
               ACTIVE SWAPS
             </span>
-            <div style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#007A3D' }}>
+            <div className="stat-value" style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#007A3D', lineHeight: 1.15 }}>
               {upcomingSessions.length}
             </div>
-            <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#15803D' }}>
+            <div className="stat-label" style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#15803D', wordBreak: 'break-word' }}>
               Scheduled sessions 📅
             </div>
           </div>
 
           {/* Stat 2 */}
-          <div style={{
+          <div className="stat-card" style={{
             background: '#FFFFFF',
             border: '2px solid #EA580C',
             borderRadius: '6px',
             padding: '18px 20px',
-            boxShadow: '0 6px 14px rgba(0,0,0,0.1)'
+            boxShadow: '0 6px 14px rgba(0,0,0,0.1)',
+            minWidth: 0,
+            overflow: 'hidden'
           }}>
             <span className="sticker-badge sticker-badge-edu" style={{ fontSize: '0.7rem', padding: '2px 8px', marginBottom: '6px' }}>
               PENDING INBOX
             </span>
-            <div style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#EA580C' }}>
+            <div className="stat-value" style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#EA580C', lineHeight: 1.15 }}>
               {pendingRequestsCount}
             </div>
-            <Link to="/inbox" style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#EA580C' }}>
+            <Link to="/inbox" className="stat-label" style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#EA580C', wordBreak: 'break-word' }}>
               Review proposals ➔
             </Link>
           </div>
 
           {/* Stat 3 */}
-          <div style={{
+          <div className="stat-card" style={{
             background: '#FFFFFF',
             border: '2px solid #0284C7',
             borderRadius: '6px',
             padding: '18px 20px',
-            boxShadow: '0 6px 14px rgba(0,0,0,0.1)'
+            boxShadow: '0 6px 14px rgba(0,0,0,0.1)',
+            minWidth: 0,
+            overflow: 'hidden'
           }}>
             <span className="sticker-badge sticker-badge-cert" style={{ fontSize: '0.7rem', padding: '2px 8px', marginBottom: '6px' }}>
               TRIANGLE LOOP
             </span>
-            <div style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#0284C7' }}>
-              {activeCircle ? '1 ACTIVE' : '0 ACTIVE'}
+            <div className="stat-value" style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#0284C7', lineHeight: 1.15 }}>
+              {activeCircle ? '1' : '0'}
             </div>
-            <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#0284C7' }}>
-              {activeCircle?.name || 'Campus Trio'}
+            <div className="stat-label" style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#0284C7', wordBreak: 'break-word' }}>
+              {activeCircle?.name || 'Active Circle Loop 🔺'}
             </div>
           </div>
 
           {/* Stat 4 */}
-          <div style={{
+          <div className="stat-card" style={{
             background: '#FFFFFF',
             border: '2px solid #CA8A04',
             borderRadius: '6px',
             padding: '18px 20px',
-            boxShadow: '0 6px 14px rgba(0,0,0,0.1)'
+            boxShadow: '0 6px 14px rgba(0,0,0,0.1)',
+            minWidth: 0,
+            overflow: 'hidden'
           }}>
             <span className="sticker-badge sticker-badge-soft" style={{ fontSize: '0.7rem', padding: '2px 8px', marginBottom: '6px' }}>
               COMPLETED
             </span>
-            <div style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#854D0E' }}>
-              {safeSessions.filter(s => s.status === 'Completed').length} SESSIONS
+            <div className="stat-value" style={{ fontFamily: 'var(--font-dela)', fontSize: '2rem', color: '#854D0E', lineHeight: 1.15 }}>
+              {safeSessions.filter(s => s.status === 'Completed').length}
             </div>
-            <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#A16207' }}>
-              {currentUser?.stats?.rating || 5.0} ★ rating
+            <div className="stat-label" style={{ fontSize: '0.78rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#A16207', wordBreak: 'break-word' }}>
+              Completed sessions 🎓
             </div>
           </div>
         </div>
@@ -420,14 +428,14 @@ export const DashboardPage = () => {
             
             {/* UPCOMING SESSION ENVELOPE / POST-IT */}
             {upcomingSessions.length > 0 ? (
-              <div className="yellow-postit" style={{ transform: 'rotate(-1deg)' }}>
-                <div style={{ fontFamily: 'var(--font-dela)', fontSize: '0.9rem', color: '#166534', marginBottom: '4px' }}>
+              <div className="yellow-postit" style={{ transform: 'rotate(-1deg)', overflow: 'hidden' }}>
+                <div style={{ fontFamily: 'var(--font-dela)', fontSize: '0.88rem', color: '#166534', marginBottom: '4px', wordBreak: 'break-word', lineHeight: 1.25 }}>
                   NEXT UPCOMING SESSION 📅
                 </div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#18181B' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#18181B', wordBreak: 'break-word' }}>
                   {upcomingSessions[0].skill}
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#4B5563', margin: '4px 0 12px 0' }}>
+                <div style={{ fontSize: '0.8rem', color: '#4B5563', margin: '4px 0 12px 0', wordBreak: 'break-word' }}>
                   {upcomingSessions[0].date} • Teacher: {upcomingSessions[0].teacher?.name || 'Peer Mentor'}
                 </div>
 
@@ -454,21 +462,21 @@ export const DashboardPage = () => {
                 </div>
               </div>
             ) : (
-              <div className="yellow-postit" style={{ transform: 'rotate(-1deg)' }}>
-                <div style={{ fontFamily: 'var(--font-dela)', fontSize: '0.9rem', color: '#166534', marginBottom: '4px' }}>
+              <div className="yellow-postit" style={{ transform: 'rotate(-1deg)', overflow: 'hidden' }}>
+                <div style={{ fontFamily: 'var(--font-dela)', fontSize: '0.88rem', color: '#166534', marginBottom: '4px', wordBreak: 'break-word', lineHeight: 1.25 }}>
                   CAMPUS STUDY PLANNER 📅
                 </div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#18181B' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#18181B', wordBreak: 'break-word' }}>
                   No upcoming sessions
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#4B5563', margin: '4px 0 12px 0' }}>
+                <div style={{ fontSize: '0.8rem', color: '#4B5563', margin: '4px 0 12px 0', wordBreak: 'break-word' }}>
                   Lock in your first 1:1 or circle swap session to practice together!
                 </div>
                 <button
                   type="button"
                   onClick={() => setActiveModal('schedule-session')}
                   className="btn-lime"
-                  style={{ width: '100%', padding: '8px', fontSize: '0.8rem' }}
+                  style={{ width: '100%', padding: '10px 12px', fontSize: '0.8rem', whiteSpace: 'normal', textAlign: 'center', justifyContent: 'center' }}
                 >
                   SCHEDULE SESSION ➔
                 </button>
