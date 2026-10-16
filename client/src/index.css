@@ -673,15 +673,19 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 20px;
+  padding: 5px 16px;
   border-radius: 9999px;
   font-family: var(--font-titan);
-  font-size: 0.95rem;
-  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   user-select: none;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  max-width: 100%;
 }
 
 .sticker-badge:hover {
@@ -1019,15 +1023,243 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
 /* ==========================================================================
    EXCLUSIVE NATIVE MOBILE APP LAYOUT ENGINE
    Applies to:
-   1. Real Mobile Devices & Viewports (<= 768px)
-   2. Mobile Simulator Frame (.mobile-simulator-viewport)
-   3. Mobile App Container (.mobile-app-container)
+   1. In-App Mobile Simulator (.mobile-simulator-viewport / .mobile-app-container)
+   2. Real Mobile Devices (<= 768px Viewport)
    Does NOT affect desktop/PC viewports (> 768px outside mobile sim)
    ========================================================================== */
 
-/* 1. Mobile Desk Background: Modern Dark Emerald Canvas (No stretched cardboard lines) */
+/* --------------------------------------------------------------------------
+   PART 1: In-App Mobile Simulator Frame (.mobile-simulator-viewport / .mobile-app-container)
+   -------------------------------------------------------------------------- */
 .mobile-simulator-viewport .scrapbook-desk,
-.mobile-app-container .scrapbook-desk,
+.mobile-app-container .scrapbook-desk {
+  background: #081C13 !important;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.22) 0%, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
+    linear-gradient(180deg, #092218 0%, #06150E 100%) !important;
+  min-height: 100% !important;
+  padding: 12px 10px 88px 10px !important;
+}
+
+.mobile-simulator-viewport .notebook-sheet,
+.mobile-app-container .notebook-sheet {
+  background: #FFFFFF !important;
+  color: #18181B !important;
+  border-radius: 18px !important;
+  border: 1.5px solid #E2E8F0 !important;
+  border-top: 3.5px solid #008744 !important;
+  border-left: none !important;
+  border-right: 1.5px solid #E2E8F0 !important;
+  border-bottom: 2px solid #CBD5E1 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+  padding: 18px 14px !important;
+  margin-bottom: 14px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+
+/* Hide desktop tactile hardware on mobile */
+.mobile-simulator-viewport .binder-clip-top,
+.mobile-app-container .binder-clip-top,
+.mobile-simulator-viewport .pushpin-3d,
+.mobile-app-container .pushpin-3d,
+.mobile-simulator-viewport .yellow-postit::after,
+.mobile-app-container .yellow-postit::after,
+.mobile-simulator-viewport .profile-decor-arrow,
+.mobile-app-container .profile-decor-arrow,
+.mobile-simulator-viewport .landing-decor-swap-arrow,
+.mobile-app-container .landing-decor-swap-arrow,
+.mobile-simulator-viewport .star-doodle,
+.mobile-app-container .star-doodle {
+  display: none !important;
+}
+
+/* Collapse all grids to single column in simulator */
+.mobile-simulator-viewport .landing-hero-grid,
+.mobile-app-container .landing-hero-grid,
+.mobile-simulator-viewport .landing-explainer-grid,
+.mobile-app-container .landing-explainer-grid,
+.mobile-simulator-viewport .dashboard-top-bento,
+.mobile-app-container .dashboard-top-bento,
+.mobile-simulator-viewport .dashboard-main-grid,
+.mobile-app-container .dashboard-main-grid,
+.mobile-simulator-viewport .match-cards-grid,
+.mobile-app-container .match-cards-grid,
+.mobile-simulator-viewport [style*="repeat(12"],
+.mobile-app-container [style*="repeat(12"],
+.mobile-simulator-viewport [style*="minmax(360px"],
+.mobile-app-container [style*="minmax(360px"],
+.mobile-simulator-viewport [style*="minmax(320px"],
+.mobile-app-container [style*="minmax(320px"],
+.mobile-simulator-viewport [style*="minmax(280px, 340px)"],
+.mobile-app-container [style*="minmax(280px, 340px)"] {
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+}
+
+/* Span collapse in simulator */
+.mobile-simulator-viewport .landing-hero-left,
+.mobile-app-container .landing-hero-left,
+.mobile-simulator-viewport .landing-hero-right,
+.mobile-app-container .landing-hero-right,
+.mobile-simulator-viewport .landing-explainer-card,
+.mobile-app-container .landing-explainer-card,
+.mobile-simulator-viewport .auth-pitch-col,
+.mobile-app-container .auth-pitch-col,
+.mobile-simulator-viewport .auth-card-col,
+.mobile-app-container .auth-card-col,
+.mobile-simulator-viewport [style*="grid-column: span"],
+.mobile-simulator-viewport [style*="gridColumn: 'span"],
+.mobile-app-container [style*="grid-column: span"],
+.mobile-app-container [style*="gridColumn: 'span"] {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+}
+
+/* Dashboard Stats 2x2 */
+.mobile-simulator-viewport .stats-bento-grid,
+.mobile-app-container .stats-bento-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+}
+.mobile-simulator-viewport .stats-bento-grid > div,
+.mobile-app-container .stats-bento-grid > div {
+  padding: 12px 10px !important;
+  border-radius: 14px !important;
+}
+.mobile-simulator-viewport .stats-bento-grid .sticker-badge,
+.mobile-app-container .stats-bento-grid .sticker-badge {
+  font-size: 0.62rem !important;
+  padding: 2px 6px !important;
+}
+
+/* Full width buttons */
+.mobile-simulator-viewport .dashboard-welcome-actions,
+.mobile-app-container .dashboard-welcome-actions,
+.mobile-simulator-viewport .landing-cta-row,
+.mobile-app-container .landing-cta-row {
+  flex-direction: column !important;
+  width: 100% !important;
+  gap: 10px !important;
+}
+.mobile-simulator-viewport .dashboard-welcome-actions a,
+.mobile-app-container .dashboard-welcome-actions a,
+.mobile-simulator-viewport .landing-cta-row a,
+.mobile-app-container .landing-cta-row a {
+  width: 100% !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 12px 18px !important;
+}
+
+/* Horizontal pills for settings */
+.mobile-simulator-viewport .settings-tabs-container,
+.mobile-app-container .settings-tabs-container {
+  display: flex !important;
+  flex-direction: row !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  padding-bottom: 8px !important;
+  gap: 8px !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-bottom: 16px !important;
+  scrollbar-width: none !important;
+}
+.mobile-simulator-viewport .settings-tabs-container::-webkit-scrollbar,
+.mobile-app-container .settings-tabs-container::-webkit-scrollbar {
+  display: none !important;
+}
+.mobile-simulator-viewport .settings-tabs-container button,
+.mobile-app-container .settings-tabs-container button {
+  flex-shrink: 0 !important;
+  padding: 8px 14px !important;
+  font-size: 0.8rem !important;
+  border-radius: 9999px !important;
+}
+
+/* Auth pitch simplify in simulator */
+.mobile-simulator-viewport .auth-pitch-col .yellow-postit,
+.mobile-app-container .auth-pitch-col .yellow-postit,
+.mobile-simulator-viewport .auth-pitch-col .polaroid-card,
+.mobile-app-container .auth-pitch-col .polaroid-card {
+  display: none !important;
+}
+
+/* Corkboard Canvas in simulator */
+.mobile-simulator-viewport .triangle-corkboard-canvas,
+.mobile-app-container .triangle-corkboard-canvas {
+  min-height: 250px !important;
+  padding: 16px 8px !important;
+  border-radius: 14px !important;
+}
+.mobile-simulator-viewport .triangle-corkboard-canvas .polaroid-card,
+.mobile-app-container .triangle-corkboard-canvas .polaroid-card {
+  width: 68px !important;
+  padding: 4px 4px 12px 4px !important;
+  transform: none !important;
+}
+.mobile-simulator-viewport .triangle-corkboard-canvas .ripped-tag,
+.mobile-app-container .triangle-corkboard-canvas .ripped-tag {
+  font-size: 0.62rem !important;
+  padding: 2px 6px !important;
+}
+
+/* Typography titles in simulator */
+.mobile-simulator-viewport .hero-teach-title,
+.mobile-app-container .hero-teach-title {
+  font-size: 1.55rem !important;
+  line-height: 1.15 !important;
+}
+.mobile-simulator-viewport .hero-learn-title,
+.mobile-app-container .hero-learn-title {
+  font-size: 1.25rem !important;
+}
+.mobile-simulator-viewport .hero-need-title,
+.mobile-app-container .hero-need-title {
+  font-size: 1.65rem !important;
+  line-height: 1.1 !important;
+}
+
+/* Post-It notes in simulator */
+.mobile-simulator-viewport .yellow-postit,
+.mobile-app-container .yellow-postit {
+  background: #FEF9C3 !important;
+  border: 1.5px solid #FACC15 !important;
+  border-radius: 16px !important;
+  padding: 16px 14px !important;
+  transform: none !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1) !important;
+  margin-bottom: 14px !important;
+}
+
+/* Match cards in simulator */
+.mobile-simulator-viewport .match-cards-grid .notebook-sheet,
+.mobile-app-container .match-cards-grid .notebook-sheet {
+  transform: none !important;
+  border-left: none !important;
+  border-top: 3.5px solid #008744 !important;
+  margin-bottom: 12px !important;
+}
+
+/* Hide desktop nav in simulator */
+.mobile-simulator-viewport .desktop-nav-links,
+.mobile-simulator-viewport .desktop-search-trigger,
+.mobile-app-container .desktop-nav-links,
+.mobile-app-container .desktop-search-trigger,
+.mobile-simulator-viewport .navbar-brand-subtitle,
+.mobile-app-container .navbar-brand-subtitle {
+  display: none !important;
+}
+.mobile-simulator-viewport .mobile-bottom-nav,
+.mobile-app-container .mobile-bottom-nav {
+  display: flex !important;
+}
+
+/* --------------------------------------------------------------------------
+   PART 2: Real Mobile Devices (<= 768px Viewport)
+   -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   .scrapbook-desk {
     background: #081C13 !important;
@@ -1036,14 +1268,9 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
       radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
       linear-gradient(180deg, #092218 0%, #06150E 100%) !important;
     min-height: 100vh !important;
-    padding: 14px 12px 88px 12px !important;
+    padding: 12px 10px 88px 10px !important;
   }
-}
 
-/* 2. Mobile App Cards: Sleek modern surface (Replaces desktop binder paper) */
-.mobile-simulator-viewport .notebook-sheet,
-.mobile-app-container .notebook-sheet,
-@media (max-width: 768px) {
   .notebook-sheet {
     background: #FFFFFF !important;
     color: #18181B !important;
@@ -1054,250 +1281,59 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
     border-right: 1.5px solid #E2E8F0 !important;
     border-bottom: 2px solid #CBD5E1 !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 3px 8px rgba(0, 0, 0, 0.08) !important;
-    padding: 18px 16px !important;
+    padding: 18px 14px !important;
     margin-bottom: 14px !important;
     position: relative !important;
     overflow: hidden !important;
     transform: none !important;
   }
-}
 
-/* 3. Hide Unwanted Desktop Metaphors on Mobile (Binder Clips & 3D Pushpins) */
-.mobile-simulator-viewport .binder-clip-top,
-.mobile-app-container .binder-clip-top,
-.mobile-simulator-viewport .pushpin-3d,
-.mobile-app-container .pushpin-3d,
-.mobile-simulator-viewport .yellow-postit::after,
-.mobile-app-container .yellow-postit::after,
-@media (max-width: 768px) {
-  .binder-clip-top {
+  .binder-clip-top,
+  .pushpin-3d,
+  .yellow-postit::after,
+  .profile-decor-arrow,
+  .landing-decor-swap-arrow,
+  .star-doodle {
     display: none !important;
   }
-  .pushpin-3d {
-    display: none !important;
-  }
-  .yellow-postit::after {
-    display: none !important;
-  }
-}
 
-/* 4. Sleek Mobile Post-It / Highlight Cards */
-.mobile-simulator-viewport .yellow-postit,
-.mobile-app-container .yellow-postit,
-@media (max-width: 768px) {
-  .yellow-postit {
-    background: #FEF9C3 !important;
-    border: 1.5px solid #FACC15 !important;
-    border-radius: 16px !important;
-    padding: 16px 14px !important;
-    transform: none !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1) !important;
-    margin-bottom: 14px !important;
-  }
-}
-
-/* 5. Mobile Polaroid / Profile Photo Containers */
-.mobile-simulator-viewport .polaroid-card,
-.mobile-app-container .polaroid-card,
-@media (max-width: 768px) {
-  .polaroid-card {
-    border-radius: 14px !important;
-    padding: 8px !important;
-    transform: none !important;
-    border: 1.5px solid #E2E8F0 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-  }
-}
-
-/* 6. Clean Mobile Pill Badges & Ripped Tags */
-.mobile-simulator-viewport .ripped-tag,
-.mobile-app-container .ripped-tag,
-@media (max-width: 768px) {
-  .ripped-tag {
-    clip-path: none !important;
-    transform: none !important;
-    border-radius: 8px !important;
-    padding: 4px 10px !important;
-    font-family: var(--font-sans) !important;
-    font-weight: 700 !important;
-    font-size: 0.74rem !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    letter-spacing: 0.02em !important;
-  }
-}
-
-.mobile-simulator-viewport .sticker-badge,
-.mobile-app-container .sticker-badge,
-@media (max-width: 768px) {
-  .sticker-badge {
-    border-radius: 8px !important;
-    padding: 3px 10px !important;
-    font-family: var(--font-sans) !important;
-    font-size: 0.72rem !important;
-    font-weight: 800 !important;
-    border-width: 1.5px !important;
-    box-shadow: none !important;
-    letter-spacing: 0.03em !important;
-  }
-}
-
-/* 7. Full-Width Thumb-Friendly Native Mobile Action Buttons */
-.mobile-simulator-viewport .btn-3d-green,
-.mobile-app-container .btn-3d-green,
-.mobile-simulator-viewport .btn-3d-yellow,
-.mobile-app-container .btn-3d-yellow,
-.mobile-simulator-viewport .btn-3d-blue,
-.mobile-app-container .btn-3d-blue,
-.mobile-simulator-viewport .btn-3d-red,
-.mobile-app-container .btn-3d-red,
-@media (max-width: 768px) {
-  .btn-3d-green, .btn-3d-yellow, .btn-3d-blue, .btn-3d-red {
-    border-radius: 12px !important;
-    padding: 12px 18px !important;
-    font-size: 0.88rem !important;
-    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2) !important;
-    letter-spacing: 0.02em !important;
-  }
-}
-
-/* 8. Mobile Bottom-Sheet Style Modals */
-.mobile-simulator-viewport .scrapbook-modal-backdrop,
-.mobile-app-container .scrapbook-modal-backdrop,
-@media (max-width: 768px) {
-  .scrapbook-modal-backdrop {
-    align-items: flex-end !important;
-    padding: 0 !important;
-  }
-  .scrapbook-modal-sheet {
-    border-radius: 24px 24px 0 0 !important;
-    border-left: none !important;
-    border-bottom: none !important;
-    max-height: 85vh !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 24px 18px 36px 18px !important;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
-  }
-}
-
-/* 9. Grid Flow & Single-Column Stack in Mobile Simulator & Phones */
-.mobile-simulator-viewport [style*="repeat(12, 1fr)"],
-.mobile-simulator-viewport [style*="repeat(12,1fr)"],
-.mobile-app-container [style*="repeat(12, 1fr)"],
-.mobile-app-container [style*="repeat(12,1fr)"],
-@media (max-width: 768px) {
-  [style*="repeat(12, 1fr)"],
-  [style*="repeat(12,1fr)"] {
+  .landing-hero-grid,
+  .landing-explainer-grid,
+  .dashboard-top-bento,
+  .dashboard-main-grid,
+  .match-cards-grid,
+  [style*="repeat(12"],
+  [style*="minmax(360px"],
+  [style*="minmax(320px"],
+  [style*="minmax(280px, 340px)"] {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
   }
-}
 
-.mobile-simulator-viewport [style*="grid-column: span"],
-.mobile-simulator-viewport [style*="gridColumn: 'span"],
-.mobile-app-container [style*="grid-column: span"],
-.mobile-app-container [style*="gridColumn: 'span"],
-@media (max-width: 768px) {
+  .landing-hero-left,
+  .landing-hero-right,
+  .landing-explainer-card,
+  .auth-pitch-col,
+  .auth-card-col,
   [style*="grid-column: span"],
   [style*="gridColumn: 'span"] {
     grid-column: 1 / -1 !important;
     width: 100% !important;
   }
-}
 
-/* 10. Match Cards & Grid Lists on Mobile */
-.mobile-simulator-viewport [style*="minmax(360px, 1fr)"],
-.mobile-app-container [style*="minmax(360px, 1fr)"],
-.mobile-simulator-viewport .match-cards-grid,
-.mobile-app-container .match-cards-grid,
-@media (max-width: 768px) {
-  [style*="minmax(360px, 1fr)"],
-  .match-cards-grid {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-  }
-}
-
-/* 11. Navigation Bar & Floating Trigger in Mobile View */
-.mobile-simulator-viewport .desktop-nav-links,
-.mobile-simulator-viewport .desktop-search-trigger,
-.mobile-app-container .desktop-nav-links,
-.mobile-app-container .desktop-search-trigger,
-@media (max-width: 768px) {
-  .desktop-nav-links,
-  .desktop-search-trigger {
-    display: none !important;
-  }
-}
-
-.mobile-simulator-viewport .mobile-bottom-nav,
-.mobile-app-container .mobile-bottom-nav,
-@media (max-width: 768px) {
-  .mobile-bottom-nav {
-    display: flex !important;
-  }
-}
-
-.mobile-simulator-viewport .navbar-brand-subtitle,
-.mobile-app-container .navbar-brand-subtitle,
-@media (max-width: 768px) {
-  .navbar-brand-subtitle {
-    display: none !important;
-  }
-}
-
-.mobile-simulator-viewport .floating-screen-navigator,
-.mobile-app-container .floating-screen-navigator,
-@media (max-width: 768px) {
-  .floating-screen-navigator {
-    bottom: 80px !important;
-    right: 12px !important;
-  }
-  .floating-screen-navigator button {
-    padding: 6px 10px !important;
-    font-size: 0.72rem !important;
-  }
-}
-
-/* 12. Manila Envelope & Decorative Elements in Mobile View */
-.mobile-simulator-viewport .manila-envelope,
-.mobile-app-container .manila-envelope,
-@media (max-width: 768px) {
-  .manila-envelope {
-    width: 100% !important;
-    max-width: 280px !important;
-    margin: 0 auto !important;
-    transform: none !important;
-  }
-}
-
-/* 13. Mobile Dashboard 2x2 App KPI Metric Grid */
-.mobile-simulator-viewport .stats-bento-grid,
-.mobile-app-container .stats-bento-grid,
-@media (max-width: 768px) {
   .stats-bento-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
   }
   .stats-bento-grid > div {
-    padding: 12px 12px !important;
+    padding: 12px 10px !important;
     border-radius: 14px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
   }
   .stats-bento-grid .sticker-badge {
     font-size: 0.62rem !important;
     padding: 2px 6px !important;
-    margin-bottom: 4px !important;
   }
-}
 
-/* 14. Full-Width Clean CTAs on Dashboard and Landing */
-.mobile-simulator-viewport .dashboard-welcome-actions,
-.mobile-app-container .dashboard-welcome-actions,
-.mobile-simulator-viewport .landing-cta-row,
-.mobile-app-container .landing-cta-row,
-@media (max-width: 768px) {
   .dashboard-welcome-actions,
   .landing-cta-row {
     flex-direction: column !important;
@@ -1311,12 +1347,7 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
     text-align: center !important;
     padding: 12px 18px !important;
   }
-}
 
-/* 15. Native Mobile Settings Horizontal Scrollable Pills */
-.mobile-simulator-viewport .settings-tabs-container,
-.mobile-app-container .settings-tabs-container,
-@media (max-width: 768px) {
   .settings-tabs-container {
     display: flex !important;
     flex-direction: row !important;
@@ -1337,33 +1368,12 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
     font-size: 0.8rem !important;
     border-radius: 9999px !important;
   }
-}
 
-/* 16. Auth Forms Focused Layout on Mobile */
-.mobile-simulator-viewport .auth-pitch-col .yellow-postit,
-.mobile-app-container .auth-pitch-col .yellow-postit,
-.mobile-simulator-viewport .auth-pitch-col .polaroid-card,
-.mobile-app-container .auth-pitch-col .polaroid-card,
-@media (max-width: 768px) {
   .auth-pitch-col .yellow-postit,
   .auth-pitch-col .polaroid-card {
     display: none !important;
   }
-  .auth-pitch-col h1 {
-    font-size: 1.5rem !important;
-    line-height: 1.2 !important;
-    margin-bottom: 8px !important;
-  }
-  .auth-pitch-col p {
-    font-size: 0.85rem !important;
-    margin-bottom: 12px !important;
-  }
-}
 
-/* 17. Compact Triangle Corkboard Canvas on Mobile */
-.mobile-simulator-viewport .triangle-corkboard-canvas,
-.mobile-app-container .triangle-corkboard-canvas,
-@media (max-width: 768px) {
   .triangle-corkboard-canvas {
     min-height: 250px !important;
     padding: 16px 8px !important;
@@ -1372,48 +1382,85 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
   .triangle-corkboard-canvas .polaroid-card {
     width: 68px !important;
     padding: 4px 4px 12px 4px !important;
+    transform: none !important;
   }
   .triangle-corkboard-canvas .ripped-tag {
     font-size: 0.62rem !important;
     padding: 2px 6px !important;
   }
-}
 
-/* 18. Decorative Doodles Hidden on Mobile to Prevent Collisions */
-.mobile-simulator-viewport .profile-decor-arrow,
-.mobile-app-container .profile-decor-arrow,
-.mobile-simulator-viewport .star-doodle,
-.mobile-app-container .star-doodle,
-@media (max-width: 768px) {
-  .profile-decor-arrow,
-  .star-doodle {
-    display: none !important;
+  .hero-teach-title {
+    font-size: 1.55rem !important;
+    line-height: 1.15 !important;
   }
-}
+  .hero-learn-title {
+    font-size: 1.25rem !important;
+  }
+  .hero-need-title {
+    font-size: 1.65rem !important;
+    line-height: 1.1 !important;
+  }
 
-/* 19. Match Cards Sleek Single-Column Flow on Mobile */
-.mobile-simulator-viewport .match-cards-grid .notebook-sheet,
-.mobile-app-container .match-cards-grid .notebook-sheet,
-@media (max-width: 768px) {
+  .yellow-postit {
+    background: #FEF9C3 !important;
+    border: 1.5px solid #FACC15 !important;
+    border-radius: 16px !important;
+    padding: 16px 14px !important;
+    transform: none !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 14px !important;
+  }
+
   .match-cards-grid .notebook-sheet {
     transform: none !important;
     border-left: none !important;
     border-top: 3.5px solid #008744 !important;
     margin-bottom: 12px !important;
   }
-}
 
-/* 20. Multi-Column Grids Collapsing Cleanly to Single Column on Mobile */
-.mobile-simulator-viewport [style*="minmax(280px, 340px)"],
-.mobile-app-container [style*="minmax(280px, 340px)"],
-.mobile-simulator-viewport [style*="minmax(320px, 1fr)"],
-.mobile-app-container [style*="minmax(320px, 1fr)"],
-@media (max-width: 768px) {
-  [style*="minmax(280px, 340px)"],
-  [style*="minmax(320px, 1fr)"] {
-    grid-template-columns: 1fr !important;
+  .desktop-nav-links,
+  .desktop-search-trigger,
+  .navbar-brand-subtitle {
+    display: none !important;
+  }
+
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+
+  .scrapbook-modal-backdrop {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .scrapbook-modal-sheet {
+    border-radius: 24px 24px 0 0 !important;
+    border-left: none !important;
+    border-bottom: none !important;
+    max-height: 85vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 24px 18px 36px 18px !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Buttons */
+  .btn-3d-green, .btn-3d-yellow, .btn-3d-blue, .btn-3d-red {
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+    font-size: 0.88rem !important;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2) !important;
+  }
+
+  /* Hide the desktop device switcher floating button on real mobile devices */
+  .floating-screen-navigator .btn-3d-yellow {
+    display: none !important;
+  }
+  .floating-screen-navigator {
+    bottom: 80px !important;
+    right: 12px !important;
   }
 }
+
 
 
 

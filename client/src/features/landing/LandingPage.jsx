@@ -79,7 +79,7 @@ export const LandingPage = () => {
               </div>
 
               {/* Bold Expressive Typography (From User's Image) */}
-              <div style={{
+              <div className="hero-teach-title" style={{
                 fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
                 fontFamily: 'var(--font-titan)',
                 color: '#1E3A8A',
@@ -91,7 +91,7 @@ export const LandingPage = () => {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap', margin: '4px 0 10px 0' }}>
-                <span style={{
+                <span className="hero-learn-title" style={{
                   fontFamily: 'var(--font-hand)',
                   fontSize: 'clamp(1.6rem, 3vw, 2.4rem)',
                   fontWeight: 700,
@@ -100,7 +100,7 @@ export const LandingPage = () => {
                 }}>
                   and learn what you
                 </span>
-                <span style={{
+                <span className="hero-need-title" style={{
                   fontSize: 'clamp(2.4rem, 4.5vw, 3.6rem)',
                   fontFamily: 'var(--font-dela)',
                   color: '#008744',
@@ -184,7 +184,7 @@ export const LandingPage = () => {
               
               {/* Manila Envelope at Top Right */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px', position: 'relative' }}>
-                <div style={{
+                <div className="landing-decor-swap-arrow" style={{
                   position: 'absolute',
                   top: '80px',
                   right: '50px',
@@ -308,7 +308,7 @@ export const LandingPage = () => {
           {/* =========================================================================
               EXPLAINER SECTION: 1-TO-1 SWAP vs TRIANGLE SKILL CIRCLE
               ========================================================================= */}
-          <div style={{
+          <div className="landing-explainer-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: '24px',
@@ -316,7 +316,7 @@ export const LandingPage = () => {
             paddingTop: '36px'
           }}>
             {/* 1-to-1 Card */}
-            <div style={{
+            <div className="landing-explainer-card" style={{
               gridColumn: 'span 6',
               background: '#FFFFFF',
               border: '2px solid #E5E7EB',
@@ -339,7 +339,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Triangle Circle Card */}
-            <div style={{
+            <div className="landing-explainer-card" style={{
               gridColumn: 'span 6',
               background: '#FFFFFF',
               border: '2px solid #008744',

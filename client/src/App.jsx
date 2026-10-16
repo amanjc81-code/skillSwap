@@ -93,16 +93,36 @@ const AppContent = () => {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        {/* Device Mode Notice */}
+        {/* Device Mode Notice Bar */}
         <div style={{
           textAlign: 'center',
           marginBottom: '14px',
-          color: '#FEF08A',
-          fontFamily: 'var(--font-hand)',
-          fontSize: '1.2rem',
-          fontWeight: 700
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '12px',
+          flexWrap: 'wrap'
         }}>
-          📱 <strong>Mobile Simulator View (iPhone 16 Pro mockup)</strong> • Tap <strong>Desktop View</strong> in the bottom right to expand ✍️
+          <span style={{
+            background: 'rgba(0,0,0,0.5)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            padding: '6px 14px',
+            borderRadius: '9999px',
+            color: '#FEF08A',
+            fontFamily: 'var(--font-sans)',
+            fontSize: '0.84rem',
+            fontWeight: 700
+          }}>
+            📱 iPhone 16 Pro View (395 × 844)
+          </span>
+          <button
+            type="button"
+            onClick={() => setDeviceView('desktop')}
+            className="btn-3d-yellow"
+            style={{ padding: '6px 16px', fontSize: '0.78rem' }}
+          >
+            🖥️ EXPAND TO FULL DESKTOP
+          </button>
         </div>
 
         {/* Mobile Viewport Bezel (iPhone 16 Pro 395px x 844px) */}

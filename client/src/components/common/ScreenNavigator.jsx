@@ -63,10 +63,11 @@ export const ScreenNavigator = () => {
 
   return (
     <>
-      {/* Floating Navigator Bar (Bottom-Right) */}
+      {/* Floating Navigator Bar (Bottom-Right on Desktop, Top-Right in Mobile-Sim) */}
       <div className="floating-screen-navigator" style={{
         position: 'fixed',
-        bottom: '24px',
+        bottom: deviceView === 'mobile-sim' ? 'auto' : '24px',
+        top: deviceView === 'mobile-sim' ? '20px' : 'auto',
         right: '24px',
         zIndex: 9000,
         display: 'flex',
