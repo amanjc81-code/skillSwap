@@ -4,12 +4,15 @@
 [![React Version](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Express Version](https://img.shields.io/badge/Express-4.21.2-000000?logo=express&logoColor=white)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose%208.9-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-amanjc81--code%2FskillSwap-181717?logo=github&logoColor=white)](https://github.com/amanjc81-code/skillSwap)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Production%20Ready-000000?logo=vercel&logoColor=white)](https://vercel.com)
 [![License](https://img.shields.io/badge/Academic-MIT%20ACSC%20TYBCA-blue.svg)](#academic-attribution)
-[![Tests](https://img.shields.io/badge/Tests-25%20Passing-success.svg)](#testing--verification-suite)
+[![Tests](https://img.shields.io/badge/Tests-Passing%20(Client%20%26%20Server)-success.svg)](#testing--verification-suite)
 
 > **MIT Arts, Commerce & Science College (ACSC), Alandi (D), Pune**  
 > **Bachelor of Computer Applications (TYBCA) — Semester V Field Project**  
-> *Production-Minded, Full-Stack Academic Web Application with Explainable AI & Graph Analytics*
+> *Production-Minded, Full-Stack Academic Web Application with Explainable AI & Graph Analytics*  
+> **Repository:** [https://github.com/amanjc81-code/skillSwap](https://github.com/amanjc81-code/skillSwap)
 
 ---
 
@@ -24,13 +27,14 @@
 7. [Comprehensive REST API Reference](#-comprehensive-rest-api-reference)
 8. [Database Schema & Data Models](#-database-schema--data-models)
 9. [Installation & Local Setup](#-installation--local-setup)
-10. [Pre-Seeded Demo Personas & Credentials](#-pre-seeded-demo-personas--credentials)
-11. [13-Step Automated Evaluation Scenario](#-13-step-automated-evaluation-scenario)
-12. [Testing & Verification Suite](#-testing--verification-suite)
-13. [Frontend Experience & Design System](#-frontend-experience--design-system)
-14. [Security, Privacy & RBAC Architecture](#-security-privacy--rbac-architecture)
-15. [Viva Defense / Academic Q&A Guide](#-viva-defense--academic-qa-guide)
-16. [Academic Attribution & License](#-academic-attribution--license)
+10. [Cloud & Vercel Production Deployment](#-cloud--vercel-production-deployment)
+11. [Pre-Seeded Demo Personas & Credentials](#-pre-seeded-demo-personas--credentials)
+12. [13-Step Automated Evaluation Scenario](#-13-step-automated-evaluation-scenario)
+13. [Testing & Verification Suite](#-testing--verification-suite)
+14. [Frontend Experience & Responsive Mobile Architecture](#-frontend-experience--responsive-mobile-architecture)
+15. [Security, Privacy & RBAC Architecture](#-security-privacy--rbac-architecture)
+16. [Viva Defense / Academic Q&A Guide](#-viva-defense--academic-qa-guide)
+17. [Academic Attribution & License](#-academic-attribution--license)
 
 ---
 
@@ -444,6 +448,70 @@ npm run dev
 
 ---
 
+## ☁️ Cloud & Vercel Production Deployment
+
+SkillMesh is architected for zero-friction cloud deployment. The frontend and backend can be hosted together or decoupled across industry-standard free-tier cloud platforms.
+
+### Recommended Production Topology
+- **Frontend SPA:** Hosted on **[Vercel](https://vercel.com/)** (Global Edge CDN, automatic Brotli/Gzip, zero-config HTTPS).
+- **Backend REST API:** Hosted on **[Render.com](https://render.com/)** or **[Railway.app](https://railway.app/)** (Long-running Node.js process).
+- **Persistent Database:** Hosted on **[MongoDB Atlas](https://www.mongodb.com/atlas)** (Free M0 Shared Cluster).
+
+---
+
+### Deploying Frontend to Vercel (Step-by-Step)
+
+The repository includes pre-configured [`vercel.json`](file:///d:/feild%20project/vercel.json) and [`client/vercel.json`](file:///d:/feild%20project/client/vercel.json) files to ensure that React Router Single Page Application (SPA) rewrites execute correctly without returning `404 Not Found` upon page refresh.
+
+1. **Sign in to Vercel:** Go to [vercel.com](https://vercel.com/) and click **"Add New Project"**.
+2. **Import Repository:** Select `amanjc81-code/skillSwap`.
+3. **Build & Output Settings:**
+   - **Framework Preset:** `Vite`
+   - **Root Directory:** `./` *(default)*
+   - **Build Command:** `npm run build` *(runs `npm run build --prefix client`)*
+   - **Output Directory:** `client/dist` *(configured in `vercel.json`)*
+   *(Alternatively, if setting Root Directory to `client`, the output directory defaults automatically to `dist`).*
+4. **Environment Variables:**
+   - `VITE_API_URL`: `https://your-backend-api.onrender.com` *(points production frontend requests to your live backend)*
+5. **Click Deploy:** Vercel builds and issues your live deployment URL (e.g. `https://skillswap.vercel.app`) in under 60 seconds.
+
+#### SPA Rewrite Rules (`vercel.json`)
+```json
+{
+  "buildCommand": "npm run build --prefix client",
+  "outputDirectory": "client/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+---
+
+### Deploying Backend to Render / Railway
+
+1. **Create Web Service:** Connect your GitHub repository to [Render](https://render.com/).
+2. **Build & Start Commands:**
+   - **Root Directory:** `server`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+3. **Environment Variables:**
+   ```env
+   NODE_ENV=production
+   PORT=5000
+   MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/skillmesh?retryWrites=true&w=majority
+   JWT_SECRET=your-secure-production-random-secret-key-64chars
+   JWT_EXPIRES_IN=7d
+   COOKIE_SECURE=true
+   CORS_ORIGIN=https://your-app.vercel.app
+   ```
+4. **Database Connection:** Once deployed, your backend automatically verifies the MongoDB Atlas connection and responds to `/api/v1/health`.
+
+---
+
 ## 👥 Pre-Seeded Demo Personas & Credentials
 
 The seed script creates a complete collegiate ecosystem designed for demonstration:
@@ -512,17 +580,38 @@ npm run test:client
 
 ---
 
-## 🎨 Frontend Experience & Design System
+## 🎨 Frontend Experience & Responsive Mobile Architecture
 
-The frontend was built from scratch without external component libraries or utility CSS frameworks.
+The frontend was engineered from the ground up in Vanilla CSS without bulky third-party component libraries or Tailwind dependencies, ensuring pure performance, unique tactile personality, and zero CSS bloat.
 
-### Design Principles:
-1. **The Modern Academic Chalkboard:** Built with deep forest green hues (`#0d2d1e`, `#123e2a`), warm paper highlights (`#FEF08A`, `#FEF9C3`), and crisp card surfaces.
-2. **Dual-Mode Viewport:**
-   - **Fluid Desktop View:** Full-width responsive layout for desktop evaluation.
-   - **iPhone 16 Pro Simulator Frame:** Includes simulated Dynamic Island, bezel frame, and mobile navigation bar for mobile UX testing.
-3. **Floating Screen Navigator:** An interactive floating directory in the bottom-left corner allowing instant navigation across all 20 pages with one click.
-4. **Interactive SVG Graph:** Dynamically renders the skill prerequisite hierarchy with color-coded nodes indicating mastered vs. target skills.
+### 1. The Tactile Academic Scrapbook Aesthetic
+Built with curated collegiate tones:
+- **Corrugated Locker Desk:** Deep chalkboard greens (`#123e2a`, `#0e3422`).
+- **Binder Sheets & Manila Cards:** Warm paper textures (`#FBF8EE`, `#FEF08A`, `#FEF9C3`).
+- **Custom Typography System:**
+  - `var(--font-dela)`: *Dela Gothic One* for chunky display headers and numerical counters.
+  - `var(--font-titan)`: *Titan One* for tactile 3D action buttons.
+  - `var(--font-hand)`: *Caveat* (700 bold) for handwriting instructor notes and sticky markers.
+  - `var(--font-marker)`: *Permanent Marker* for highlight stamps.
+
+### 2. Bespoke Mobile vs. Desktop Architectural Split
+Rather than merely squeezing desktop layouts onto small screens, SkillMesh applies a **two-tier device layout**:
+- **Desktop Monitors & Laptops ($> 768\text{px}$):**
+  - Full-width multi-column bento grids, tactile 3D binder clips, metallic pushpins, and multi-student circular cohort corkboards.
+- **Native Touchscreen Mobile ($\le 768\text{px}$):**
+  - Converts complex tables and nested columns into a fluid, single-column **native mobile card flow**.
+  - **Fixed Bottom Navigation Dock (`.mobile-bottom-nav`):** Accessible thumb navigation with 48px hit areas for Dashboard, Matches, Skills, Sessions, and Profile.
+  - **Distraction-Free Mobile Authentication:** Automatically strips decorative marketing sidebars, displaying an ultra-clean, high-focus Google 1-click button and email/password inputs.
+  - **Contextual Mobile Header:** Dynamically toggles actions (e.g. "Get Started" on `/login` vs "Log In" on `/signup`) to eliminate header overcrowding.
+
+### 3. Anti-Overflow Invariants & Typography Safety
+- **Decoupled KPI Metrics:** Display numbers (e.g. `0`, `1`) in chunky display font (`font-dela`) are structurally separated from semantic labels (`Scheduled sessions 📅`, `Completed sessions 🎓`), preventing wide text strings from spilling out of compact mobile cards.
+- **Word-Break Safeguards:** Cards, tags, and session planner envelopes enforce `word-break: break-word`, `overflow: hidden`, and `line-height: 1.25`, ensuring flawless presentation across all phone viewports (360px–430px).
+
+### 4. Interactive Live Preview & Developer Tools
+- **Live Dual-Mode Simulator:** The client includes an interactive **iPhone 16 Pro Simulator Frame** accessible via the floating bottom navigator, allowing evaluators to preview mobile touch interactions directly from any desktop browser.
+- **Floating Screen Navigator:** Instant 1-click traversal across all 20 pages of the application.
+- **Interactive SVG Skill DAG:** Dynamically computes and renders the prerequisite hierarchy with live node coloring based on mastered competencies.
 
 ---
 

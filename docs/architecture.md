@@ -26,8 +26,17 @@
    - [4.3 Skill Graph Prerequisite Cycle Rejection](#43-skill-graph-prerequisite-cycle-rejection)
 5. [Database Data Dictionary & Entity-Relationship Model](#5-database-data-dictionary--entity-relationship-model)
 6. [Frontend State Management & Viewport Architecture](#6-frontend-state-management--viewport-architecture)
+   - [6.1 State Partitioning Strategy](#61-state-partitioning-strategy)
+   - [6.2 Dual-Mode Viewport Simulator](#62-dual-mode-viewport-simulator)
+   - [6.3 Two-Tier Responsive Mobile Layout Engine](#63-two-tier-responsive-mobile-layout-engine)
+   - [6.4 Zero-Layout-Overflow Typography Invariants](#64-zero-layout-overflow-typography-invariants)
 7. [Security Architecture & Threat Modeling](#7-security-architecture--threat-modeling)
 8. [Reliability, Graceful Degradation & In-Memory Fallbacks](#8-reliability-graceful-degradation--in-memory-fallbacks)
+9. [Cloud Production Deployment Architecture & Edge Routing](#9-cloud-production-deployment-architecture--edge-routing)
+   - [9.1 Single Page Application (SPA) Edge Rewrites (`vercel.json`)](#91-single-page-application-spa-edge-rewrites-verceljson)
+   - [9.2 Decoupled API Endpoint Topology (`VITE_API_URL`)](#92-decoupled-api-endpoint-topology-vite_api_url)
+   - [9.3 Monorepo Multi-Target Build Protocol](#93-monorepo-multi-target-build-protocol)
+   - [9.4 PaaS Container Execution (Render / Railway)](#94-paas-container-execution-render--railway)
 
 ---
 
@@ -530,6 +539,23 @@ To facilitate academic review on both desktop monitors and mobile devices, the c
 - **Mobile Sim Mode:** Constrains viewport dimensions to an iPhone 16 Pro bezel (393px width, 852px height) with animated Dynamic Island, status bar, and bottom thumb-navigation.
 - **Mode Toggle:** Instantly switchable via the floating bottom-right **Screen Navigator**.
 
+### 6.3 Two-Tier Responsive Mobile Layout Engine
+Rather than relying on generic auto-resizing frameworks, SkillMesh implements a bespoke two-tier layout paradigm configured in Vanilla CSS:
+
+1. **Desktop Canvas ($> 768\text{px}$):**
+   - Renders tactile physical metaphors: corrugated green locker backgrounds, metallic chrome binder clips (`.binder-clip-top`), 3D pushpins (`.pushpin-3d`), and multi-column bento matrices.
+2. **Native Touch Mobile Canvas ($\le 768\text{px}$):**
+   - Automatically collapses desktop multi-column spans into single-column vertical card flows (`grid-template-columns: 1fr !important`).
+   - Hides decorative hardware clips and desktop-only arrows to maximize useful information density.
+   - **Ergonomic Bottom Navigation Dock (`.mobile-bottom-nav`):** Fixes a 64px thumb-accessible dock to the bottom viewport with 48px hit areas for instantaneous switching between Dashboard, Match Explorer, Skill Taxonomy, Sessions, and Profile.
+   - **Progressive Mobile Auth Simplification:** Strips marketing sidebars on mobile screens, displaying an unobstructed Google 1-click button and email/password authentication fields.
+
+### 6.4 Zero-Layout-Overflow Typography Invariants
+In mobile viewports (down to 360px viewport widths), aggressive display fonts can easily overflow card boundaries if unit labels are embedded within header strings. SkillMesh guarantees strict layout stability through:
+- **Decoupled KPI Counters:** Big numbers styled in `var(--font-dela)` (e.g., `{upcomingSessions.length}`, `{completedCount}`) are stored independently from semantic subtitles (`Scheduled sessions 📅`, `Completed sessions 🎓`).
+- **Bounded Container Properties:** All metric cards enforce `min-width: 0 !important`, `overflow: hidden !important`, and `text-overflow: ellipsis !important`.
+- **Word-Break Safeguards:** Post-it envelopes and match badges employ `word-break: break-word` and `line-height: 1.25`, ensuring that student names and long session titles never clip or trigger horizontal scrollbars.
+
 ---
 
 ## 7. Security Architecture & Threat Modeling
@@ -587,4 +613,82 @@ When external AI API keys are not supplied (`AI_PROVIDER=fallback`), `aiService.
 
 ---
 
+## 9. Cloud Production Deployment Architecture & Edge Routing
+
+SkillMesh's monorepo architecture decouples client-side presentation from server-side computational services, allowing independent continuous integration and zero-downtime deployment.
+
+```mermaid
+graph LR
+    User["Student Browser / Mobile Device"]
+
+    subgraph "Edge CDN Layer (Vercel)"
+        VercelCDN["Vercel Global Edge Network"]
+        SPARewrites["SPA Catch-All Rewrites\n(/(.*) -> /index.html)"]
+        DistAssets["Static Chunks & Assets\n(/dist/assets/*.js, *.css)"]
+    end
+
+    subgraph "Application Layer (Render / Railway)"
+        PaaSInstance["Node.js + Express Container\n(Auto-Scaled Web Service)"]
+        HealthProbe["Health Check Endpoint\n(/api/v1/health)"]
+    end
+
+    subgraph "Managed Persistence Layer"
+        AtlasDB[("MongoDB Atlas M0 Cluster\n(WiredTiger Engine, TLS 1.3)")]
+    end
+
+    User -->|"HTTPS GET /dashboard"| VercelCDN
+    VercelCDN --> SPARewrites
+    SPARewrites --> DistAssets
+
+    User -->|"HTTPS REST /api/v1/* (Credentials: include)"| PaaSInstance
+    PaaSInstance --> HealthProbe
+    PaaSInstance -->|"Mongoose Connection Pool (TLS)"| AtlasDB
+```
+
+### 9.1 Single Page Application (SPA) Edge Rewrites (`vercel.json`)
+Client-side routing managed by `react-router-dom` requires that all deep route paths (e.g., `/dashboard`, `/match`, `/inbox`, `/settings`) return the root `index.html` payload so the client router can mount the corresponding view.
+Without explicit edge rewrite rules, a browser refresh on a non-root path triggers a `404 Not Found` response from standard static web servers.
+
+SkillMesh resolves this via declarative rewrite rules in [`vercel.json`](file:///d:/feild%20project/vercel.json) and [`client/vercel.json`](file:///d:/feild%20project/client/vercel.json):
+```json
+{
+  "buildCommand": "npm run build --prefix client",
+  "outputDirectory": "client/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+### 9.2 Decoupled API Endpoint Topology (`VITE_API_URL`)
+To support hybrid cloud deployments where the Vite frontend is hosted on Vercel and the Express API is hosted on Render or Railway, [`client/src/lib/api.js`](file:///d:/feild%20project/client/src/lib/api.js) employs dynamic base URL resolution:
+```javascript
+const API_HOST = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace(/\/$/, '') 
+  : '';
+
+export const BASE_URL = `${API_HOST}/api/v1`;
+```
+- **Local Development:** `VITE_API_URL` is omitted; Vite dev server transparently proxies all `/api` requests to `http://localhost:5000` via `vite.config.js`.
+- **Production Cloud:** `VITE_API_URL` is injected via Vercel Environment Variables (e.g., `https://skillswap-api.onrender.com`), transmitting all network calls directly to the live backend container with `credentials: 'include'` for secure cookie handling.
+
+### 9.3 Monorepo Multi-Target Build Protocol
+The root [`package.json`](file:///d:/feild%20project/package.json) orchestrates build execution across the monorepo workspace:
+- `npm run build`: Invokes `npm run build --prefix client` to compile the optimized production bundle (`dist/`) via Rollup/Vite.
+- `npm run install:all`: Concurrently resolves and installs dependencies across root, server, and client directories.
+- `outputDirectory: "client/dist"`: Directs Vercel's build pipeline to the exact compiled client artifact directory when imported from the repository root.
+
+### 9.4 PaaS Container Execution (Render / Railway)
+The backend service operates as a stateless web container configured with:
+- **Port Binding:** Dynamically binds to `process.env.PORT` allocated by the hosting orchestrator.
+- **Persistent TLS Connection:** Connects to MongoDB Atlas via connection pooling (`mongoose.connect(env.MONGODB_URI)`).
+- **Graceful Shutdown Hooks:** Listens to `SIGTERM` and `SIGINT` signals to flush pending writes and close active HTTP listeners without dropping in-flight student transactions.
+
+---
+
 *Authored for the MIT ACSC TYBCA Semester V Field Project Academic Review Board.*
+*Repository: https://github.com/amanjc81-code/skillSwap*
+
