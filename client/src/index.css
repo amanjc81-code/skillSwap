@@ -1506,14 +1506,14 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
     box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2) !important;
   }
 
-  /* Hide the desktop device switcher floating button on real mobile devices */
-  .floating-screen-navigator .btn-3d-yellow {
+  /* Hide the floating navigator buttons */
+  .floating-screen-navigator {
     display: none !important;
   }
-  .floating-screen-navigator {
-    bottom: 80px !important;
-    right: 12px !important;
-  }
+}
+
+.floating-screen-navigator {
+  display: none !important;
 }
 
 

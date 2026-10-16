@@ -608,10 +608,9 @@ Rather than merely squeezing desktop layouts onto small screens, SkillMesh appli
 - **Decoupled KPI Metrics:** Display numbers (e.g. `0`, `1`) in chunky display font (`font-dela`) are structurally separated from semantic labels (`Scheduled sessions 📅`, `Completed sessions 🎓`), preventing wide text strings from spilling out of compact mobile cards.
 - **Word-Break Safeguards:** Cards, tags, and session planner envelopes enforce `word-break: break-word`, `overflow: hidden`, and `line-height: 1.25`, ensuring flawless presentation across all phone viewports (360px–430px).
 
-### 4. Interactive Live Preview & Developer Tools
-- **Live Dual-Mode Simulator:** The client includes an interactive **iPhone 16 Pro Simulator Frame** accessible via the floating bottom navigator, allowing evaluators to preview mobile touch interactions directly from any desktop browser.
-- **Floating Screen Navigator:** Instant 1-click traversal across all 20 pages of the application.
+### 4. Interactive Tools & Graph Visualizer
 - **Interactive SVG Skill DAG:** Dynamically computes and renders the prerequisite hierarchy with live node coloring based on mastered competencies.
+- **Production-Clean Interface:** Development floating overlay buttons (`MOBILE SIM` and `20 SCREENS GUIDE`) are hidden, delivering a pristine, clutter-free user interface.
 
 ---
 

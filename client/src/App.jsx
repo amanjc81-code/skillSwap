@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SkillSwapProvider, useSkillSwap } from './app/SkillSwapContext.jsx';
 import { Navbar } from './components/layout/Navbar.jsx';
 import { MobileBottomNav } from './components/layout/MobileBottomNav.jsx';
-import { ScreenNavigator } from './components/common/ScreenNavigator.jsx';
 
 // Interactive Modals
 import { SwapRequestModal } from './components/modals/SwapRequestModal.jsx';
@@ -77,91 +76,8 @@ const ToastContainer = () => {
   );
 };
 
-// Main App Container with Mobile Simulator Frame support
+// Main App Container (Fully Responsive across Desktop, Tablet, and Mobile)
 const AppContent = () => {
-  const { deviceView } = useSkillSwap();
-
-  if (deviceView === 'mobile-sim') {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: '#0d2d1e',
-        backgroundImage: 'repeating-linear-gradient(90deg, #092317 0px, #092317 28px, #123e2a 28px, #123e2a 30px, #071c12 30px, #071c12 32px)',
-        padding: '30px 10px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        {/* Device Mode Notice Bar */}
-        <div style={{
-          textAlign: 'center',
-          marginBottom: '14px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '12px',
-          flexWrap: 'wrap'
-        }}>
-          <span style={{
-            background: 'rgba(0,0,0,0.5)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            padding: '6px 14px',
-            borderRadius: '9999px',
-            color: '#FEF08A',
-            fontFamily: 'var(--font-sans)',
-            fontSize: '0.84rem',
-            fontWeight: 700
-          }}>
-            📱 iPhone 16 Pro View (395 × 844)
-          </span>
-          <button
-            type="button"
-            onClick={() => setDeviceView('desktop')}
-            className="btn-3d-yellow"
-            style={{ padding: '6px 16px', fontSize: '0.78rem' }}
-          >
-            🖥️ EXPAND TO FULL DESKTOP
-          </button>
-        </div>
-
-        {/* Mobile Viewport Bezel (iPhone 16 Pro 395px x 844px) */}
-        <div className="mobile-simulator-viewport" style={{
-          width: '100%',
-          maxWidth: '395px',
-          height: '844px',
-          boxShadow: '0 25px 60px rgba(0,0,0,0.8), 0 0 0 4px #27272A',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative'
-        }}>
-          {/* Dynamic Island */}
-          <div className="mobile-island">
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#111' }} />
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#222' }} />
-          </div>
-
-          <div className="mobile-app-container" style={{
-            flex: 1,
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            background: '#081C13',
-            overflow: 'hidden',
-            position: 'relative'
-          }}>
-            <Navbar />
-            <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '76px' }}>
-              <AppRoutes />
-            </div>
-            <MobileBottomNav />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Fluid Desktop View (Responsive on all devices: Desktop, Tablet, Mobile)
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', width: '100%', overflowX: 'hidden' }}>
       <Navbar />
@@ -255,10 +171,6 @@ export const App = () => {
         <ScheduleSessionModal />
         <RatingReviewModal />
         <CircleCelebrationModal />
-
-        {/* Quick 20 Screens Floating Directory & Device Switcher */}
-        <ScreenNavigator />
-
         {/* Toast Alerts */}
         <ToastContainer />
       </BrowserRouter>

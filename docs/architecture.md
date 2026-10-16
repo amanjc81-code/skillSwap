@@ -533,11 +533,11 @@ The React frontend avoids bloated global stores by partitioning state across thr
 2. **`SkillSwapContext.jsx`:** Maintains global application state, simulated peer directories, active modal overlays, and persisted local storage cache.
 3. **`ToastContext.jsx`:** Controls the non-intrusive floating alert queue formatted in an academic yellow "post-it" sticker aesthetic.
 
-### 6.2 Dual-Mode Viewport Simulator
-To facilitate academic review on both desktop monitors and mobile devices, the client includes an embedded **Mobile Simulator Viewport**:
-- **Desktop Mode:** Expands to standard full-width responsive grid layouts.
-- **Mobile Sim Mode:** Constrains viewport dimensions to an iPhone 16 Pro bezel (393px width, 852px height) with animated Dynamic Island, status bar, and bottom thumb-navigation.
-- **Mode Toggle:** Instantly switchable via the floating bottom-right **Screen Navigator**.
+### 6.2 Responsive Viewport Architecture
+To provide an optimal experience across all form factors, the client implements a **fully adaptive responsive engine**:
+- **Desktop Mode ($> 768\text{px}$):** Expands to full-width interactive bento layouts, multi-column worksheets, and tactile desktop elements.
+- **Mobile Mode ($\le 768\text{px}$):** Automatically engages a native single-column card flow with ergonomic bottom navigation dock.
+- **Production Clean UI:** Development floating toggle buttons (`MOBILE SIM` and `20 SCREENS GUIDE`) are hidden for an uncluttered, distraction-free user experience.
 
 ### 6.3 Two-Tier Responsive Mobile Layout Engine
 Rather than relying on generic auto-resizing frameworks, SkillMesh implements a bespoke two-tier layout paradigm configured in Vanilla CSS:
