@@ -708,13 +708,47 @@ export const Navbar = () => {
           )}
 
           {isAuthPage && (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Link to="/login" className="btn-secondary" style={{ padding: '8px 18px', fontSize: '0.85rem', textDecoration: 'none' }}>
-                Log In
-              </Link>
-              <Link to="/signup" className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem', textDecoration: 'none' }}>
-                Get Started
-              </Link>
+            <div className="auth-nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              {location.pathname === '/signup' ? (
+                <Link
+                  to="/login"
+                  className="btn-secondary"
+                  style={{
+                    padding: '6px 14px',
+                    fontSize: '0.82rem',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap',
+                    borderRadius: '9999px',
+                    border: '1.5px solid rgba(255,255,255,0.2)',
+                    color: '#FFF',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  Log In
+                </Link>
+              ) : (
+                <Link
+                  to="/signup"
+                  className="btn-primary"
+                  style={{
+                    padding: '6px 14px',
+                    fontSize: '0.82rem',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap',
+                    borderRadius: '9999px',
+                    background: '#008744',
+                    border: '1.5px solid #005a2d',
+                    color: '#FFF',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  Get Started
+                </Link>
+              )}
             </div>
           )}
         </div>

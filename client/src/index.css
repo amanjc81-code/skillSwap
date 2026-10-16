@@ -1248,6 +1248,15 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
 }
 
 /* Hide desktop nav in simulator */
+.mobile-simulator-viewport .app-navbar-header,
+.mobile-app-container .app-navbar-header {
+  padding: 0 12px !important;
+  height: 56px !important;
+}
+.mobile-simulator-viewport .navbar-brand-title,
+.mobile-app-container .navbar-brand-title {
+  font-size: 1.12rem !important;
+}
 .mobile-simulator-viewport .desktop-nav-links,
 .mobile-simulator-viewport .desktop-search-trigger,
 .mobile-app-container .desktop-nav-links,
@@ -1427,6 +1436,13 @@ p, span, h1, h2, h3, h4, h5, h6, pre, code, button {
     margin-bottom: 12px !important;
   }
 
+  .app-navbar-header {
+    padding: 0 12px !important;
+    height: 56px !important;
+  }
+  .navbar-brand-title {
+    font-size: 1.12rem !important;
+  }
   .desktop-nav-links,
   .desktop-search-trigger,
   .navbar-brand-subtitle {
