@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSkillSwap } from '../../app/SkillSwapContext.jsx';
 import {
-  Star,
+  ArrowLeft,Star,
   Award,
   Zap,
   CheckCircle2,
@@ -20,12 +20,57 @@ import {
 
 export const StudentProfilePage = () => {
   const navigate = useNavigate();
-  const { currentUser, sessions, setActiveModal, setModalPayload } = useSkillSwap();
+  const { id } = useParams();
+  const { currentUser, students, sessions, setActiveModal, setModalPayload } = useSkillSwap();
   const [activeTab, setActiveTab] = useState('scrapbook'); // 'scrapbook' | 'reviews' | 'sessions'
 
-  const reviewsList = currentUser.reviews || [];
+  // Resolve target student: either from route param /profile/:id or fallback to currentUser
+  const targetStudent = id ? (students || []).find(s => s.id === id) : null;
+  const isViewingSelf = !targetStudent || targetStudent.id === currentUser.id;
+
+  const profileUser = isViewingSelf ? currentUser : {
+    id: targetStudent.id,
+    name: targetStudent.name,
+    handle: targetStudent.handle || `@${targetStudent.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`,
+    college: targetStudent.college,
+    branch: targetStudent.branch || 'Computer Science & Engineering',
+    email: targetStudent.email || `${targetStudent.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@campus.edu`,
+    bio: targetStudent.bio,
+    avatar: targetStudent.avatar,
+    levelBadge: targetStudent.matchType === 'Perfect Match' ? 'PERFECT PEER MATCH ⚡' : 'VERIFIED PEER MENTOR 🎓',
+    stats: {
+      rating: targetStudent.rating || 4.9,
+      completedSwaps: targetStudent.reviewsCount || 18,
+      activeCircles: 1,
+      responseRate: '100%',
+      reviewsCount: targetStudent.reviewsCount || 18
+    },
+    teaching: targetStudent.canTeach || [],
+    learning: targetStudent.wantsToLearn || [],
+    availability: targetStudent.availability || targetStudent.mode || 'Both',
+    preferredTimes: targetStudent.preferredTimes || ['Weekdays 5-8 PM', 'Weekends'],
+    badges: ['Top Mentor ⚡', 'Campus Verified 🎓', 'Fast Responder 🚀'],
+    reviews: [
+      {
+        id: 'rev-1',
+        author: 'Aman Chauhan',
+        college: 'MIT ACSC',
+        skill: targetStudent.canTeach?.[0] || 'Peer Skills',
+        comment: `Awesome peer session! Extremely knowledgeable in ${targetStudent.canTeach?.[0] || 'this topic'} and very patient.`
+      },
+      {
+        id: 'rev-2',
+        author: 'Rahul Sharma',
+        college: 'COEP Tech',
+        skill: targetStudent.canTeach?.[1] || targetStudent.canTeach?.[0] || 'Core Concepts',
+        comment: 'Clear explanation with real-world examples and practical code snippets. Highly recommended for 1-to-1 swaps!'
+      }
+    ]
+  };
+
+  const reviewsList = profileUser.reviews || [];
   const completedSessions = sessions.filter(s => s.status === 'Completed');
-  const allSkills = [...(currentUser.teaching || []), ...(currentUser.learning || [])];
+  const allSkills = [...(profileUser.teaching || []), ...(profileUser.learning || [])];
 
   return (
     <div className="scrapbook-desk">
@@ -42,17 +87,38 @@ export const StudentProfilePage = () => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span className="sticker-badge sticker-badge-exp" style={{ fontSize: '0.8rem', padding: '4px 14px' }}>
-              CAMPUS PASSPORT
+              {isViewingSelf ? 'MY CAMPUS PASSPORT' : 'PEER PASSPORT'}
             </span>
             <span style={{ color: '#FDE047', fontFamily: 'var(--font-hand)', fontSize: '1.25rem', fontWeight: 700 }}>
-              SkillSwap Peer Zine ✍️
+              {isViewingSelf ? 'SkillSwap Peer Zine ✍️' : `${profileUser.name.split(' ')[0]}'s Peer Zine ✍️`}
             </span>
           </div>
 
           <div style={{ display: 'flex', gap: '10px' }}>
+            {!isViewingSelf && (
+              <button
+                type="button"
+                onClick={() => navigate('/match')}
+                className="btn-secondary"
+                style={{
+                  background: 'rgba(255,255,255,0.18)',
+                  color: '#FFF',
+                  padding: '10px 18px',
+                  fontSize: '0.85rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                <ArrowLeft size={16} /> Back to Matches
+              </button>
+            )}
+
             <button
+              type="button"
               onClick={() => {
-                setModalPayload(null);
+                setModalPayload(isViewingSelf ? null : targetStudent);
                 setActiveModal('swap-request');
               }}
               className="btn-lime"
@@ -60,23 +126,32 @@ export const StudentProfilePage = () => {
                 padding: '10px 22px',
                 fontSize: '0.9rem',
                 fontFamily: 'var(--font-titan)',
-                letterSpacing: '0.04em'
+                letterSpacing: '0.04em',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer'
               }}
             >
-              <Send size={15} /> PROPOSE 1:1 SWAP
+              <Send size={15} /> {isViewingSelf ? 'PROPOSE 1:1 SWAP' : `SWAP WITH ${profileUser.name.split(' ')[0].toUpperCase()} ⚡`}
             </button>
-            <button
-              onClick={() => navigate('/settings')}
-              className="btn-secondary"
-              style={{
-                background: 'rgba(255,255,255,0.12)',
-                color: '#FFF',
-                padding: '10px 18px',
-                fontSize: '0.85rem'
-              }}
-            >
-              <Settings size={15} /> Edit
-            </button>
+
+            {isViewingSelf && (
+              <button
+                type="button"
+                onClick={() => navigate('/settings')}
+                className="btn-secondary"
+                style={{
+                  background: 'rgba(255,255,255,0.12)',
+                  color: '#FFF',
+                  padding: '10px 18px',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer'
+                }}
+              >
+                <Settings size={15} /> Edit
+              </button>
+            )}
           </div>
         </div>
 
@@ -159,7 +234,7 @@ export const StudentProfilePage = () => {
                   <div style={{ background: '#FFF' }} />
                 </div>
                 <div style={{ fontSize: '0.62rem', fontFamily: 'var(--font-marker)', color: '#18181B', marginTop: '3px' }}>
-                  {currentUser.handle ? currentUser.handle.toUpperCase() : (currentUser.name ? `@${currentUser.name.toLowerCase().replace(/\s+/g, '')}` : '@STUDENT')}
+                  {profileUser.handle ? profileUser.handle.toUpperCase() : (profileUser.name ? `@${profileUser.name.toLowerCase().replace(/\s+/g, '')}` : '@STUDENT')}
                 </div>
               </div>
 
@@ -193,8 +268,8 @@ export const StudentProfilePage = () => {
                   background: '#18181B'
                 }}>
                   <img
-                    src={currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80'}
-                    alt={currentUser.name || 'Student Profile'}
+                    src={profileUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80'}
+                    alt={profileUser.name || 'Student Profile'}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
 
@@ -212,10 +287,10 @@ export const StudentProfilePage = () => {
                     alignItems: 'center'
                   }}>
                     <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-marker)', color: '#A3E635' }}>
-                      {currentUser.levelBadge || 'CAMPUS SWAPPER 🌱'}
+                      {profileUser.levelBadge || 'CAMPUS SWAPPER 🌱'}
                     </span>
                     <span style={{ fontSize: '0.72rem', fontWeight: 800 }}>
-                      {currentUser.stats?.rating || 5.0} ★ ({currentUser.stats?.reviewsCount || 0})
+                      {profileUser.stats?.rating || 5.0} ★ ({profileUser.stats?.reviewsCount || 0})
                     </span>
                   </div>
                 </div>
@@ -227,7 +302,7 @@ export const StudentProfilePage = () => {
                   fontSize: '0.95rem',
                   color: '#18181B'
                 }}>
-                  {currentUser.name || 'Campus Student'} • 2026
+                  {profileUser.name || 'Campus Student'} • 2026
                 </div>
               </div>
 
@@ -253,7 +328,7 @@ export const StudentProfilePage = () => {
                     VERIFIED PEER
                   </div>
                   <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-hand)', fontWeight: 700, color: '#374151' }}>
-                    {currentUser.teaching?.[0] || 'Peer Learning'} ↔ {currentUser.learning?.[0] || 'Skill Swap'}
+                    {profileUser.teaching?.[0] || 'Peer Learning'} ↔ {profileUser.learning?.[0] || 'Skill Swap'}
                   </div>
                 </div>
               </div>
@@ -290,13 +365,13 @@ export const StudentProfilePage = () => {
                   {/* Popping Letter */}
                   <div className="envelope-letter">
                     <div style={{ fontWeight: 800, color: '#1F2937', fontSize: '0.78rem', marginBottom: '2px' }}>
-                      COLLEGE: {currentUser.college || 'Campus Tech University'}
+                      COLLEGE: {profileUser.college || 'Campus Tech University'}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#4B5563', marginBottom: '2px' }}>
-                      E: {currentUser.email || 'student@campus.edu'}
+                      E: {profileUser.email || 'student@campus.edu'}
                     </div>
                     <div style={{ fontSize: '0.72rem', color: '#6B7280' }}>
-                      BRANCH: {currentUser.branch || 'Undergraduate'}
+                      BRANCH: {profileUser.branch || 'Undergraduate'}
                     </div>
                   </div>
                 </div>
@@ -311,7 +386,7 @@ export const StudentProfilePage = () => {
                   lineHeight: 1.05,
                   letterSpacing: '0.02em'
                 }}>
-                  Hi, I'm <span style={{ color: '#1D4ED8' }}>{currentUser.name ? currentUser.name.split(' ')[0].toUpperCase() : 'STUDENT'}</span>
+                  Hi, I'm <span style={{ color: '#1D4ED8' }}>{profileUser.name ? profileUser.name.split(' ')[0].toUpperCase() : 'STUDENT'}</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap', margin: '4px 0' }}>
@@ -332,7 +407,7 @@ export const StudentProfilePage = () => {
                     letterSpacing: '-0.02em',
                     textTransform: 'uppercase'
                   }}>
-                    {currentUser.teaching?.[0]?.toUpperCase() || 'NEW SKILLS'}
+                    {profileUser.teaching?.[0]?.toUpperCase() || 'NEW SKILLS'}
                   </span>
                 </div>
 
@@ -345,7 +420,7 @@ export const StudentProfilePage = () => {
                   textTransform: 'uppercase',
                   marginBottom: '14px'
                 }}>
-                  {currentUser.name ? currentUser.name.split(' ').slice(1).join(' ').toUpperCase() || 'EXCHANGER' : 'SWAPPER'}
+                  {profileUser.name ? profileUser.name.split(' ').slice(1).join(' ').toUpperCase() || 'EXCHANGER' : 'SWAPPER'}
                 </div>
               </div>
 
@@ -356,12 +431,12 @@ export const StudentProfilePage = () => {
                 color: '#374151',
                 marginBottom: '22px'
               }}>
-                {currentUser.bio || "Student and peer learner on campus. Ready to exchange skills without spending money. Connect with me for reciprocal 1-to-1 swaps and triangle circle sessions!"}
+                {profileUser.bio || "Student and peer learner on campus. Ready to exchange skills without spending money. Connect with me for reciprocal 1-to-1 swaps and triangle circle sessions!"}
               </p>
 
               {/* Quick Reputation Badges */}
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {currentUser.teaching?.slice(0, 3).map((sk, i) => (
+                {profileUser.teaching?.slice(0, 3).map((sk, i) => (
                   <span key={sk} className={`sticker-badge ${i === 0 ? 'sticker-badge-cert' : (i === 1 ? 'sticker-badge-exp' : 'sticker-badge-edu')}`} style={{ fontSize: '0.78rem', padding: '4px 12px' }}>
                     {sk.toUpperCase()} MENTOR
                   </span>
@@ -399,10 +474,10 @@ export const StudentProfilePage = () => {
                   marginBottom: '4px',
                   letterSpacing: '0.02em'
                 }}>
-                  {currentUser.teaching?.[0] ? `${currentUser.teaching[0].toUpperCase()} PEER MENTOR` : 'CAMPUS LEARNER'}
+                  {profileUser.teaching?.[0] ? `${profileUser.teaching[0].toUpperCase()} PEER MENTOR` : 'CAMPUS LEARNER'}
                 </div>
                 <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-marker)', color: '#854D0E', marginBottom: '14px' }}>
-                  (2025 - Now) • {currentUser.stats?.completedSwaps || 0} Peer Swaps
+                  (2025 - Now) • {profileUser.stats?.completedSwaps || 0} Peer Swaps
                 </div>
 
                 <div style={{
@@ -488,13 +563,13 @@ export const StudentProfilePage = () => {
 
               <div style={{ marginBottom: '28px', paddingLeft: '4px' }}>
                 <div style={{ fontFamily: 'var(--font-dela)', fontSize: '1rem', color: '#1E3A8A', marginBottom: '2px' }}>
-                  {currentUser.college ? currentUser.college.toUpperCase() : 'CAMPUS COLLEGE / UNIVERSITY'}
+                  {profileUser.college ? profileUser.college.toUpperCase() : 'CAMPUS COLLEGE / UNIVERSITY'}
                 </div>
                 <div style={{ fontSize: '0.82rem', fontFamily: 'var(--font-marker)', color: '#6B7280', marginBottom: '2px' }}>
                   (2024 - Ongoing)
                 </div>
                 <div style={{ fontSize: '0.88rem', color: '#374151', fontWeight: 600 }}>
-                  {currentUser.branch || 'Undergraduate Student • Peer Learner'}
+                  {profileUser.branch || 'Undergraduate Student • Peer Learner'}
                 </div>
               </div>
 
@@ -587,7 +662,7 @@ export const StudentProfilePage = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setModalPayload(null);
+                    setModalPayload(isViewingSelf ? null : targetStudent);
                     setActiveModal('swap-request');
                   }}
                   className="btn-lime"
@@ -597,10 +672,11 @@ export const StudentProfilePage = () => {
                     fontSize: '1.05rem',
                     fontFamily: 'var(--font-titan)',
                     letterSpacing: '0.04em',
-                    boxShadow: '0 8px 20px rgba(0, 135, 68, 0.35)'
+                    boxShadow: '0 8px 20px rgba(0, 135, 68, 0.35)',
+                    cursor: 'pointer'
                   }}
                 >
-                  <ArrowRightLeft size={18} /> INITIATE 1-TO-1 SKILL SWAP
+                  <ArrowRightLeft size={18} /> {isViewingSelf ? 'INITIATE 1-TO-1 SKILL SWAP' : `PROPOSE 1-TO-1 SWAP WITH ${profileUser.name.toUpperCase()} ⚡`}
                 </button>
               </div>
             </div>

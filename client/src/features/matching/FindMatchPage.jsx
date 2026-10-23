@@ -272,7 +272,7 @@ export const FindMatchPage = () => {
                   {/* Header with Photo & Name */}
                   <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '16px' }}>
                     {/* Mini Polaroid Frame */}
-                    <div className="polaroid-card" style={{ padding: '6px 6px 18px 6px', transform: 'rotate(-3deg)', width: '74px', flexShrink: 0 }}>
+                    <div onClick={() => navigate(`/profile/${student.id}`)} className="polaroid-card" style={{ padding: '6px 6px 18px 6px', transform: 'rotate(-3deg)', width: '74px', flexShrink: 0, cursor: 'pointer' }} title={`View ${student.name}'s Zine`}>
                       <img
                         src={student.avatar}
                         alt={student.name}
@@ -284,7 +284,7 @@ export const FindMatchPage = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div>
                           <div
-                            onClick={() => navigate('/profile')}
+                            onClick={() => navigate(`/profile/${student.id}`)}
                             style={{
                               fontFamily: 'var(--font-dela)',
                               fontSize: '1.15rem',
@@ -366,7 +366,7 @@ export const FindMatchPage = () => {
                 <div style={{ display: 'flex', gap: '10px', borderTop: '1px dashed #D1D5DB', paddingTop: '14px' }}>
                   <button
                     type="button"
-                    onClick={() => navigate('/profile')}
+                    onClick={() => navigate(`/profile/${student.id}`)}
                     style={{
                       flex: 1,
                       padding: '8px 12px',
