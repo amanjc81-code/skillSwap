@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSkillSwap } from '../../app/SkillSwapContext.jsx';
 import {
-  Sparkles,
+  Plus,Sparkles,
   Camera,
   Check,
   Search,
@@ -47,6 +47,45 @@ export const OnboardingPage = () => {
   const [learnSkills, setLearnSkills] = useState(currentUser.learning?.length ? currentUser.learning : []);
   const [teachSearch, setTeachSearch] = useState('');
   const [learnSearch, setLearnSearch] = useState('');
+  const [customSkillsList, setCustomSkillsList] = useState([]);
+
+  const handleAddCustomTeachSkill = (overrideSkill) => {
+    const skillToAdd = (typeof overrideSkill === 'string' ? overrideSkill : teachSearch).trim();
+    if (!skillToAdd) return;
+
+    const alreadySelected = teachSkills.some(s => s.toLowerCase() === skillToAdd.toLowerCase());
+    if (alreadySelected) {
+      addToast(`"${skillToAdd}" is already in your teaching list!`, 'info');
+      setTeachSearch('');
+      return;
+    }
+
+    setTeachSkills(prev => [...prev, skillToAdd]);
+    if (!customSkillsList.some(s => s.toLowerCase() === skillToAdd.toLowerCase())) {
+      setCustomSkillsList(prev => [...prev, skillToAdd]);
+    }
+    addToast(`Added "${skillToAdd}" to Skills You Can Teach! 🚀`, 'success');
+    setTeachSearch('');
+  };
+
+  const handleAddCustomLearnSkill = (overrideSkill) => {
+    const skillToAdd = (typeof overrideSkill === 'string' ? overrideSkill : learnSearch).trim();
+    if (!skillToAdd) return;
+
+    const alreadySelected = learnSkills.some(s => s.toLowerCase() === skillToAdd.toLowerCase());
+    if (alreadySelected) {
+      addToast(`"${skillToAdd}" is already in your learning goals!`, 'info');
+      setLearnSearch('');
+      return;
+    }
+
+    setLearnSkills(prev => [...prev, skillToAdd]);
+    if (!customSkillsList.some(s => s.toLowerCase() === skillToAdd.toLowerCase())) {
+      setCustomSkillsList(prev => [...prev, skillToAdd]);
+    }
+    addToast(`Added "${skillToAdd}" to Skills You Want to Learn! 🎯`, 'success');
+    setLearnSearch('');
+  };
 
   const [skillLevel, setSkillLevel] = useState('Intermediate');
   const [availability, setAvailability] = useState(currentUser.availability || 'Both');
@@ -594,18 +633,93 @@ export const OnboardingPage = () => {
                   Select at least 1 or 2 skills you feel comfortable guiding fellow students in ✍️
                 </p>
 
-                {/* Search Input */}
-                <div style={{ position: 'relative', marginBottom: '18px' }}>
-                  <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
-                  <input
-                    type="text"
-                    value={teachSearch}
-                    onChange={e => setTeachSearch(e.target.value)}
-                    placeholder="Search or add skill (e.g. React, C++, SQL)..."
-                    className="scrapbook-input"
-                    style={{ paddingLeft: '40px' }}
-                  />
+                {/* Search & Custom Add Input */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
+                    <input
+                      type="text"
+                      value={teachSearch}
+                      onChange={e => setTeachSearch(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddCustomTeachSkill();
+                        }
+                      }}
+                      placeholder="Type any skill (e.g. dataStructure in c++, React, Python)..."
+                      className="scrapbook-input"
+                      style={{ paddingLeft: '40px', width: '100%', height: '46px' }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleAddCustomTeachSkill()}
+                    disabled={!teachSearch.trim()}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '0 20px',
+                      height: '46px',
+                      borderRadius: '8px',
+                      border: '2px solid #18181B',
+                      background: teachSearch.trim() ? '#008744' : '#E4E4E7',
+                      color: teachSearch.trim() ? '#FFFFFF' : '#A1A1AA',
+                      fontFamily: 'var(--font-titan)',
+                      fontSize: '0.88rem',
+                      cursor: teachSearch.trim() ? 'pointer' : 'not-allowed',
+                      boxShadow: teachSearch.trim() ? '0 3px 0 #005a2d' : 'none',
+                      transition: 'all 0.15s ease',
+                      whiteSpace: 'nowrap'
+                    }}
+                    title="Click or press Enter to add skill"
+                  >
+                    <Plus size={18} strokeWidth={3} />
+                    <span>+ ADD</span>
+                  </button>
                 </div>
+
+                {/* Quick Add Custom Skill banner */}
+                {teachSearch.trim() && !teachSkills.some(s => s.toLowerCase() === teachSearch.trim().toLowerCase()) && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '10px',
+                    padding: '10px 14px',
+                    background: '#ECFDF5',
+                    border: '2px dashed #059669',
+                    borderRadius: '8px',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{ fontSize: '0.86rem', color: '#065F46', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>✨ Add custom skill:</span>
+                      <strong style={{ color: '#047857' }}>"{teachSearch.trim()}"</strong>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddCustomTeachSkill()}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        padding: '6px 14px',
+                        borderRadius: '6px',
+                        fontSize: '0.8rem',
+                        fontFamily: 'var(--font-titan)',
+                        background: '#008744',
+                        color: '#FFFFFF',
+                        border: '2px solid #005a2d',
+                        boxShadow: '0 2px 0 #005a2d',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Plus size={15} strokeWidth={3} /> ADD "{teachSearch.trim().toUpperCase()}"
+                    </button>
+                  </div>
+                )}
 
                 {/* Selected Chips */}
                 <div style={{ marginBottom: '18px' }}>
@@ -648,7 +762,7 @@ export const OnboardingPage = () => {
                     POPULAR CAMPUS SKILLS
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
-                    {allSkillsList
+                    {Array.from(new Set([...allSkillsList, ...customSkillsList]))
                       .filter(s => s.toLowerCase().includes(teachSearch.toLowerCase()) && !teachSkills.includes(s))
                       .map(s => (
                         <button
@@ -670,6 +784,44 @@ export const OnboardingPage = () => {
                           + {s.toUpperCase()}
                         </button>
                       ))}
+                    {Array.from(new Set([...allSkillsList, ...customSkillsList]))
+                      .filter(s => s.toLowerCase().includes(teachSearch.toLowerCase()) && !teachSkills.includes(s)).length === 0 && teachSearch.trim() && (
+                      <div style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: '#F9FAFB',
+                        borderRadius: '8px',
+                        border: '1px dashed #D1D5DB',
+                        fontSize: '0.85rem',
+                        color: '#4B5563',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '10px'
+                      }}>
+                        <span>"{teachSearch.trim()}" is not in popular skills. You can still add it!</span>
+                        <button
+                          type="button"
+                          onClick={() => handleAddCustomTeachSkill()}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            padding: '5px 12px',
+                            borderRadius: '6px',
+                            background: '#008744',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-titan)',
+                            fontSize: '0.8rem',
+                            border: '1px solid #005a2d',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <Plus size={14} /> + ADD AS SKILL
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -688,18 +840,93 @@ export const OnboardingPage = () => {
                   What do you need help with right now? Our campus engine matches you with peer mentors ✍️
                 </p>
 
-                {/* Search Input */}
-                <div style={{ position: 'relative', marginBottom: '18px' }}>
-                  <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
-                  <input
-                    type="text"
-                    value={learnSearch}
-                    onChange={e => setLearnSearch(e.target.value)}
-                    placeholder="Search or add skill (e.g. Python, SQL, System Design)..."
-                    className="scrapbook-input"
-                    style={{ paddingLeft: '40px' }}
-                  />
+                {/* Search & Custom Add Input */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
+                    <input
+                      type="text"
+                      value={learnSearch}
+                      onChange={e => setLearnSearch(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddCustomLearnSkill();
+                        }
+                      }}
+                      placeholder="Type any skill you want to learn (e.g. dataStructure in c++, Python, System Design)..."
+                      className="scrapbook-input"
+                      style={{ paddingLeft: '40px', width: '100%', height: '46px' }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleAddCustomLearnSkill()}
+                    disabled={!learnSearch.trim()}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '0 20px',
+                      height: '46px',
+                      borderRadius: '8px',
+                      border: '2px solid #18181B',
+                      background: learnSearch.trim() ? '#0284C7' : '#E4E4E7',
+                      color: learnSearch.trim() ? '#FFFFFF' : '#A1A1AA',
+                      fontFamily: 'var(--font-titan)',
+                      fontSize: '0.88rem',
+                      cursor: learnSearch.trim() ? 'pointer' : 'not-allowed',
+                      boxShadow: learnSearch.trim() ? '0 3px 0 #075985' : 'none',
+                      transition: 'all 0.15s ease',
+                      whiteSpace: 'nowrap'
+                    }}
+                    title="Click or press Enter to add target skill"
+                  >
+                    <Plus size={18} strokeWidth={3} />
+                    <span>+ ADD</span>
+                  </button>
                 </div>
+
+                {/* Quick Add Custom Skill banner */}
+                {learnSearch.trim() && !learnSkills.some(s => s.toLowerCase() === learnSearch.trim().toLowerCase()) && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '10px',
+                    padding: '10px 14px',
+                    background: '#F0F9FF',
+                    border: '2px dashed #0284C7',
+                    borderRadius: '8px',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{ fontSize: '0.86rem', color: '#0369A1', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>✨ Add custom quest:</span>
+                      <strong style={{ color: '#0284C7' }}>"{learnSearch.trim()}"</strong>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddCustomLearnSkill()}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        padding: '6px 14px',
+                        borderRadius: '6px',
+                        fontSize: '0.8rem',
+                        fontFamily: 'var(--font-titan)',
+                        background: '#0284C7',
+                        color: '#FFFFFF',
+                        border: '2px solid #075985',
+                        boxShadow: '0 2px 0 #075985',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Plus size={15} strokeWidth={3} /> ADD "{learnSearch.trim().toUpperCase()}"
+                    </button>
+                  </div>
+                )}
 
                 {/* Selected Chips */}
                 <div style={{ marginBottom: '18px' }}>
@@ -742,7 +969,7 @@ export const OnboardingPage = () => {
                     TRENDING SKILLS TO LEARN
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
-                    {allSkillsList
+                    {Array.from(new Set([...allSkillsList, ...customSkillsList]))
                       .filter(s => s.toLowerCase().includes(learnSearch.toLowerCase()) && !learnSkills.includes(s))
                       .map(s => (
                         <button
@@ -764,6 +991,44 @@ export const OnboardingPage = () => {
                           + {s.toUpperCase()}
                         </button>
                       ))}
+                    {Array.from(new Set([...allSkillsList, ...customSkillsList]))
+                      .filter(s => s.toLowerCase().includes(learnSearch.toLowerCase()) && !learnSkills.includes(s)).length === 0 && learnSearch.trim() && (
+                      <div style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: '#F9FAFB',
+                        borderRadius: '8px',
+                        border: '1px dashed #D1D5DB',
+                        fontSize: '0.85rem',
+                        color: '#4B5563',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '10px'
+                      }}>
+                        <span>"{learnSearch.trim()}" is not in popular skills. You can still add it!</span>
+                        <button
+                          type="button"
+                          onClick={() => handleAddCustomLearnSkill()}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            padding: '5px 12px',
+                            borderRadius: '6px',
+                            background: '#0284C7',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-titan)',
+                            fontSize: '0.8rem',
+                            border: '1px solid #075985',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <Plus size={14} /> + ADD AS SKILL
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

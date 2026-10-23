@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSkillSwap } from '../../app/SkillSwapContext.jsx';
 import {
-  User,
+  Plus,User,
   Settings,
   Bell,
   Shield,
@@ -44,6 +44,52 @@ export const SettingsProfilePage = () => {
   const [campusOnly, setCampusOnly] = useState(true);
   const [showRating, setShowRating] = useState(true);
   const [activityStatus, setActivityStatus] = useState(true);
+
+  // Skills management
+  const [newTeachSkill, setNewTeachSkill] = useState('');
+  const [newLearnSkill, setNewLearnSkill] = useState('');
+
+  const handleAddTeachingSkill = () => {
+    const trimmed = newTeachSkill.trim();
+    if (!trimmed) return;
+    const exists = (currentUser.teaching || []).some(s => s.toLowerCase() === trimmed.toLowerCase());
+    if (exists) {
+      addToast(`"${trimmed}" is already in your teaching list.`, 'info');
+      setNewTeachSkill('');
+      return;
+    }
+    const updated = [...(currentUser.teaching || []), trimmed];
+    setCurrentUser(prev => ({ ...prev, teaching: updated }));
+    addToast(`Added "${trimmed}" to your teaching skills! 🚀`, 'success');
+    setNewTeachSkill('');
+  };
+
+  const handleRemoveTeachingSkill = (skillToRemove) => {
+    const updated = (currentUser.teaching || []).filter(s => s !== skillToRemove);
+    setCurrentUser(prev => ({ ...prev, teaching: updated }));
+    addToast(`Removed "${skillToRemove}" from teaching skills.`, 'info');
+  };
+
+  const handleAddLearningSkill = () => {
+    const trimmed = newLearnSkill.trim();
+    if (!trimmed) return;
+    const exists = (currentUser.learning || []).some(s => s.toLowerCase() === trimmed.toLowerCase());
+    if (exists) {
+      addToast(`"${trimmed}" is already in your learning goals.`, 'info');
+      setNewLearnSkill('');
+      return;
+    }
+    const updated = [...(currentUser.learning || []), trimmed];
+    setCurrentUser(prev => ({ ...prev, learning: updated }));
+    addToast(`Added "${trimmed}" to your learning goals! 🎯`, 'success');
+    setNewLearnSkill('');
+  };
+
+  const handleRemoveLearningSkill = (skillToRemove) => {
+    const updated = (currentUser.learning || []).filter(s => s !== skillToRemove);
+    setCurrentUser(prev => ({ ...prev, learning: updated }));
+    addToast(`Removed "${skillToRemove}" from learning goals.`, 'info');
+  };
 
   const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
@@ -490,43 +536,141 @@ export const SettingsProfilePage = () => {
                     MANAGE YOUR SKILLS &amp; MASTERY
                   </h2>
 
-                  <div style={{ marginBottom: '24px' }}>
-                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#15803D', marginBottom: '10px', fontWeight: 800 }}>
-                      Skills You Can Teach
+                  {/* SKILLS YOU CAN TEACH */}
+                  <div style={{ marginBottom: '28px' }}>
+                    <label style={{ display: 'block', fontSize: '0.88rem', color: '#15803D', marginBottom: '10px', fontFamily: 'var(--font-titan)' }}>
+                      SKILLS YOU CAN TEACH ({currentUser.teaching?.length || 0})
                     </label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                      {currentUser.teaching.map(sk => (
-                        <span key={sk} className="ripped-tag ripped-green" style={{ cursor: 'pointer' }}>
-                          ✓ {sk} ✕
-                        </span>
-                      ))}
+                    
+                    {/* Add new custom skill input */}
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                      <input
+                        type="text"
+                        value={newTeachSkill}
+                        onChange={e => setNewTeachSkill(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddTeachingSkill();
+                          }
+                        }}
+                        placeholder="Type any skill you can teach (e.g. dataStructure in c++, React, Python)..."
+                        className="scrapbook-input"
+                        style={{ flex: 1, height: '42px', fontSize: '0.9rem' }}
+                      />
                       <button
-                        onClick={() => addToast('Added new teaching skill!', 'success')}
-                        className="sticker-badge sticker-badge-exp"
-                        style={{ fontSize: '0.78rem', padding: '4px 12px' }}
+                        type="button"
+                        onClick={handleAddTeachingSkill}
+                        disabled={!newTeachSkill.trim()}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '0 16px',
+                          height: '42px',
+                          borderRadius: '8px',
+                          border: '2px solid #18181B',
+                          background: newTeachSkill.trim() ? '#008744' : '#E4E4E7',
+                          color: newTeachSkill.trim() ? '#FFFFFF' : '#A1A1AA',
+                          fontFamily: 'var(--font-titan)',
+                          fontSize: '0.85rem',
+                          cursor: newTeachSkill.trim() ? 'pointer' : 'not-allowed',
+                          boxShadow: newTeachSkill.trim() ? '0 2px 0 #005a2d' : 'none'
+                        }}
                       >
-                        + Add More
+                        <Plus size={16} strokeWidth={3} />
+                        <span>+ ADD</span>
                       </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {(!currentUser.teaching || currentUser.teaching.length === 0) ? (
+                        <span style={{ fontSize: '0.85rem', color: '#71717A', fontStyle: 'italic' }}>
+                          No teaching skills added yet. Type a skill above to add!
+                        </span>
+                      ) : (
+                        currentUser.teaching.map(sk => (
+                          <button
+                            key={sk}
+                            type="button"
+                            onClick={() => handleRemoveTeachingSkill(sk)}
+                            className="ripped-tag ripped-green"
+                            style={{ cursor: 'pointer', border: 'none', font: 'inherit' }}
+                            title={`Click to remove "${sk}"`}
+                          >
+                            ✓ {sk} ✕
+                          </button>
+                        ))
+                      )}
                     </div>
                   </div>
 
+                  {/* SKILLS YOU WANT TO LEARN */}
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#1D4ED8', marginBottom: '10px', fontWeight: 800 }}>
-                      Skills You Want to Learn
+                    <label style={{ display: 'block', fontSize: '0.88rem', color: '#1D4ED8', marginBottom: '10px', fontFamily: 'var(--font-titan)' }}>
+                      SKILLS YOU WANT TO LEARN ({currentUser.learning?.length || 0})
                     </label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                      {currentUser.learning.map(sk => (
-                        <span key={sk} className="ripped-tag ripped-blue" style={{ cursor: 'pointer' }}>
-                          🎯 {sk} ✕
-                        </span>
-                      ))}
+
+                    {/* Add new custom skill input */}
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                      <input
+                        type="text"
+                        value={newLearnSkill}
+                        onChange={e => setNewLearnSkill(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddLearningSkill();
+                          }
+                        }}
+                        placeholder="Type any skill you want to learn (e.g. dataStructure in c++, Next.js, Cloud)..."
+                        className="scrapbook-input"
+                        style={{ flex: 1, height: '42px', fontSize: '0.9rem' }}
+                      />
                       <button
-                        onClick={() => addToast('Added new learning goal!', 'success')}
-                        className="sticker-badge sticker-badge-cert"
-                        style={{ fontSize: '0.78rem', padding: '4px 12px' }}
+                        type="button"
+                        onClick={handleAddLearningSkill}
+                        disabled={!newLearnSkill.trim()}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '0 16px',
+                          height: '42px',
+                          borderRadius: '8px',
+                          border: '2px solid #18181B',
+                          background: newLearnSkill.trim() ? '#0284C7' : '#E4E4E7',
+                          color: newLearnSkill.trim() ? '#FFFFFF' : '#A1A1AA',
+                          fontFamily: 'var(--font-titan)',
+                          fontSize: '0.85rem',
+                          cursor: newLearnSkill.trim() ? 'pointer' : 'not-allowed',
+                          boxShadow: newLearnSkill.trim() ? '0 2px 0 #075985' : 'none'
+                        }}
                       >
-                        + Add More
+                        <Plus size={16} strokeWidth={3} />
+                        <span>+ ADD</span>
                       </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {(!currentUser.learning || currentUser.learning.length === 0) ? (
+                        <span style={{ fontSize: '0.85rem', color: '#71717A', fontStyle: 'italic' }}>
+                          No learning goals added yet. Type a skill above to add!
+                        </span>
+                      ) : (
+                        currentUser.learning.map(sk => (
+                          <button
+                            key={sk}
+                            type="button"
+                            onClick={() => handleRemoveLearningSkill(sk)}
+                            className="ripped-tag ripped-blue"
+                            style={{ cursor: 'pointer', border: 'none', font: 'inherit' }}
+                            title={`Click to remove "${sk}"`}
+                          >
+                            🎯 {sk} ✕
+                          </button>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
