@@ -3,6 +3,146 @@ import { BASE_URL } from '../lib/api.js';
 
 const SkillSwapContext = createContext(null);
 
+// High-Fidelity Demo Student Templates for 1-to-1 Matching Presentation
+export const INITIAL_DEMO_STUDENTS = [
+  {
+    id: 'demo-student-1',
+    name: 'Rohan Mehta',
+    college: 'MIT ACSC • TYBCA',
+    branch: 'Computer Science',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    rating: 4.9,
+    reviewsCount: 19,
+    mode: 'Both',
+    compatibility: 98,
+    matchType: 'Perfect Match',
+    bio: 'Backend API developer building microservices. I can teach Python, FastAPI, and Pandas data pipelines. Looking to learn Full Stack and PostgreSQL for my semester project!',
+    canTeach: ['Python', 'FastAPI', 'Pandas'],
+    wantsToLearn: ['Full Stack', 'PostgreSQL', 'React'],
+    availability: 'Weekdays 5-8 PM & Weekends',
+    reputation: 98
+  },
+  {
+    id: 'demo-student-2',
+    name: 'Ananya Deshmukh',
+    college: 'COEP Tech • Computer Engg',
+    branch: 'Data Science & AI',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80',
+    rating: 5.0,
+    reviewsCount: 24,
+    mode: 'Online',
+    compatibility: 96,
+    matchType: 'Perfect Match',
+    bio: 'Data science & analytics geek. Hands-on with Python, Pandas data cleaning, and FastAPI endpoints. Need peer mentorship to learn C++ and DSA for product interview rounds!',
+    canTeach: ['Python', 'FastAPI', 'Pandas', 'Machine Learning'],
+    wantsToLearn: ['C++', 'DSA & Algorithms', 'PostgreSQL'],
+    availability: 'Flexible • Online Only',
+    reputation: 96
+  },
+  {
+    id: 'demo-student-3',
+    name: 'Vikramaditya Iyer',
+    college: 'VIT Pune • Information Tech',
+    branch: 'Information Technology',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80',
+    rating: 4.8,
+    reviewsCount: 16,
+    mode: 'Both',
+    compatibility: 95,
+    matchType: 'Perfect Match',
+    bio: 'Built automated web pipelines with Python & FastAPI. Strong with Pandas dataframes. Looking to master C++ systems and Full Stack web architecture with a peer!',
+    canTeach: ['Python', 'FastAPI', 'Pandas', 'SQL'],
+    wantsToLearn: ['C++', 'Full Stack', 'System Design'],
+    availability: 'Evenings 6-9 PM',
+    reputation: 94
+  },
+  {
+    id: 'demo-student-4',
+    name: 'Priya Nair',
+    college: 'PICT Pune • Computer Engg',
+    branch: 'Computer Engineering',
+    avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&auto=format&fit=crop&q=80',
+    rating: 4.9,
+    reviewsCount: 21,
+    mode: 'Online',
+    compatibility: 94,
+    matchType: 'Strong Match',
+    bio: 'Full Stack web developer & UI/UX designer. Love crafting interactive React apps and schema design in PostgreSQL. Want to learn Python & FastAPI backend!',
+    canTeach: ['Full Stack', 'React', 'PostgreSQL', 'UI/UX Design'],
+    wantsToLearn: ['Python', 'FastAPI', 'Pandas'],
+    availability: 'Daily 7-10 PM',
+    reputation: 93
+  },
+  {
+    id: 'demo-student-5',
+    name: 'Aditya Sharma',
+    college: 'MIT ACSC • SYBCA',
+    branch: 'Computer Science',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+    rating: 4.7,
+    reviewsCount: 13,
+    mode: 'Both',
+    compatibility: 92,
+    matchType: 'Strong Match',
+    bio: 'C++ competitive programmer with 400+ LeetCode problems solved. Can guide through pointers, STL & DSA. Want to learn Full Stack and FastAPI web frameworks!',
+    canTeach: ['C++', 'DSA & Algorithms', 'PostgreSQL'],
+    wantsToLearn: ['Full Stack', 'Python', 'FastAPI'],
+    availability: 'Weekends & Offline Campus',
+    reputation: 91
+  },
+  {
+    id: 'demo-student-6',
+    name: 'Sneha Kulkarni',
+    college: 'Symbiosis SIT • Computer Science',
+    branch: 'Data Science',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+    rating: 4.9,
+    reviewsCount: 18,
+    mode: 'Online',
+    compatibility: 90,
+    matchType: 'Strong Match',
+    bio: 'Database specialist with deep expertise in PostgreSQL indexing, SQL queries and DB normalization. Looking to learn Python, Pandas & FastAPI for ETL pipelines!',
+    canTeach: ['PostgreSQL', 'SQL', 'System Design'],
+    wantsToLearn: ['Python', 'Pandas', 'FastAPI'],
+    availability: 'Mon, Wed, Fri 4-7 PM',
+    reputation: 90
+  },
+  {
+    id: 'demo-student-7',
+    name: 'Kabir Joshi',
+    college: 'DY Patil College of Engg',
+    branch: 'Information Technology',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+    rating: 4.8,
+    reviewsCount: 11,
+    mode: 'Both',
+    compatibility: 88,
+    matchType: 'Partial Match',
+    bio: 'DevOps & Linux sysadmin hobbyist. Containerizing apps with Docker & CI/CD. Excited to swap knowledge with peers knowing Python or Full Stack!',
+    canTeach: ['Docker', 'Linux/Bash', 'System Design'],
+    wantsToLearn: ['Python', 'FastAPI', 'React'],
+    availability: 'Saturday & Sunday All Day',
+    reputation: 88
+  },
+  {
+    id: 'demo-student-8',
+    name: 'Tanvi Malhotra',
+    college: 'MIT ACSC • TYBCA',
+    branch: 'Computer Science',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    rating: 5.0,
+    reviewsCount: 22,
+    mode: 'Online',
+    compatibility: 93,
+    matchType: 'Perfect Match',
+    bio: 'Modern frontend developer with React, Next.js & Tailwind CSS. Happy to share frontend tricks in exchange for C++ or PostgreSQL backend guidance!',
+    canTeach: ['React', 'Next.js', 'Figma', 'Tailwind CSS'],
+    wantsToLearn: ['PostgreSQL', 'C++', 'Python'],
+    availability: 'Tue & Thu 6-9 PM',
+    reputation: 95
+  }
+];
+
 export const SkillSwapProvider = ({ children }) => {
   // Mobile frame simulator toggle ('desktop' or 'mobile-sim')
   const [deviceView, setDeviceView] = useState('desktop');
@@ -56,16 +196,29 @@ export const SkillSwapProvider = ({ children }) => {
     }
   }, [currentUser]);
 
-  // Student directory for 1-to-1 matching and profiles (Fresh empty state / synced from localStorage)
+  // Student directory for 1-to-1 matching and profiles (Initialized with rich campus demo templates)
   const [students, setStudents] = useState(() => {
     try {
       const saved = localStorage.getItem('skillswap_students');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch (e) {
       console.error(e);
     }
-    return [];
+    return INITIAL_DEMO_STUDENTS;
   });
+
+  const resetStudentsToDemo = () => {
+    setStudents(INITIAL_DEMO_STUDENTS);
+    try {
+      localStorage.setItem('skillswap_students', JSON.stringify(INITIAL_DEMO_STUDENTS));
+    } catch (e) {
+      console.error(e);
+    }
+    addToast('Loaded campus demo peer matches! ✨', 'success');
+  };
 
   useEffect(() => {
     try {
@@ -402,6 +555,9 @@ export const SkillSwapProvider = ({ children }) => {
         currentUser,
         setCurrentUser,
         students,
+        setStudents,
+        resetStudentsToDemo,
+        INITIAL_DEMO_STUDENTS,
         receivedRequests,
         sentRequests,
         activeCircle,

@@ -17,7 +17,7 @@ import {
 
 export const FindMatchPage = () => {
   const navigate = useNavigate();
-  const { students, setActiveModal, setModalPayload } = useSkillSwap();
+  const { students, setActiveModal, setModalPayload, resetStudentsToDemo } = useSkillSwap();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSkillFilter, setSelectedSkillFilter] = useState('All');
@@ -25,22 +25,25 @@ export const FindMatchPage = () => {
   const [selectedModeFilter, setSelectedModeFilter] = useState('All');
   const [selectedMatchFilter, setSelectedMatchFilter] = useState('All');
 
-  // Filter logic
-  const filteredStudents = students.filter(student => {
+  // Robust Filter logic
+  const filteredStudents = (students || []).filter(student => {
+    const q = searchQuery.toLowerCase().trim();
     const matchesQuery =
-      student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.canTeach.some(s => s.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      student.wantsToLearn.some(s => s.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      student.college.toLowerCase().includes(searchQuery.toLowerCase());
+      !q ||
+      student.name.toLowerCase().includes(q) ||
+      student.canTeach.some(s => s.toLowerCase().includes(q)) ||
+      student.wantsToLearn.some(s => s.toLowerCase().includes(q)) ||
+      student.college.toLowerCase().includes(q) ||
+      (student.branch && student.branch.toLowerCase().includes(q));
 
     const matchesSkill =
       selectedSkillFilter === 'All' ||
-      student.canTeach.includes(selectedSkillFilter) ||
-      student.wantsToLearn.includes(selectedSkillFilter);
+      student.canTeach.some(s => s.toLowerCase() === selectedSkillFilter.toLowerCase()) ||
+      student.wantsToLearn.some(s => s.toLowerCase() === selectedSkillFilter.toLowerCase());
 
     const matchesCollege =
       selectedCollegeFilter === 'All' ||
-      student.college.includes(selectedCollegeFilter);
+      student.college.toLowerCase().includes(selectedCollegeFilter.toLowerCase());
 
     const matchesMode =
       selectedModeFilter === 'All' ||
@@ -91,21 +94,46 @@ export const FindMatchPage = () => {
               </p>
             </div>
 
-            {/* Hand-drawn Callout Badge */}
-            <div style={{
-              background: '#FEF08A',
-              border: '2px solid #EAB308',
-              borderRadius: '4px',
-              padding: '10px 14px',
-              transform: 'rotate(2deg)',
-              boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-marker)', color: '#78350F' }}>
-                RECIPROCAL EXCHANGE
+            {/* Hand-drawn Callout Badge & Demo Button */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+              <div style={{
+                background: '#FEF08A',
+                border: '2px solid #EAB308',
+                borderRadius: '4px',
+                padding: '10px 14px',
+                transform: 'rotate(2deg)',
+                boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+              }}>
+                <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-marker)', color: '#78350F' }}>
+                  RECIPROCAL EXCHANGE
+                </div>
+                <div style={{ fontFamily: 'var(--font-hand)', fontSize: '1.2rem', color: '#15803D', fontWeight: 700 }}>
+                  100% Value • Zero Cash
+                </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-hand)', fontSize: '1.2rem', color: '#15803D', fontWeight: 700 }}>
-                100% Value • Zero Cash
-              </div>
+
+              <button
+                type="button"
+                onClick={resetStudentsToDemo}
+                style={{
+                  background: '#ECFDF5',
+                  border: '2px solid #059669',
+                  borderRadius: '6px',
+                  padding: '6px 14px',
+                  fontFamily: 'var(--font-titan)',
+                  fontSize: '0.8rem',
+                  color: '#065F46',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 0 #059669',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+                title="Reload high-fidelity campus demo students"
+              >
+                <Sparkles size={14} color="#059669" />
+                <span>RELOAD DEMO PEERS (8)</span>
+              </button>
             </div>
           </div>
 
@@ -160,7 +188,7 @@ export const FindMatchPage = () => {
 
             <div style={{ width: '1px', height: '24px', background: '#D1D5DB', alignSelf: 'center' }} />
 
-            {['SQL', 'Python', 'React', 'UI/UX', 'C++'].map(skill => (
+            {['Python', 'FastAPI', 'Pandas', 'Full Stack', 'C++', 'PostgreSQL', 'React', 'SQL'].map(skill => (
               <button
                 key={skill}
                 type="button"
@@ -196,9 +224,19 @@ export const FindMatchPage = () => {
             <p style={{ fontFamily: 'var(--font-hand)', fontSize: '1.25rem', color: '#78350F', fontWeight: 700, maxWidth: '440px', margin: '0 auto 18px auto', lineHeight: 1.35 }}>
               Your platform is fresh and clean! Once fellow students sign up and list what they can teach, their mutual cards will appear here.
             </p>
-            <a href="/onboarding" className="btn-3d-green" style={{ display: 'inline-block', padding: '10px 24px', fontSize: '0.85rem' }}>
-              UPDATE MY SKILLS ⚡
-            </a>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={resetStudentsToDemo}
+                className="btn-3d-green"
+                style={{ padding: '10px 24px', fontSize: '0.85rem', cursor: 'pointer' }}
+              >
+                ✨ LOAD 8 DEMO CAMPUS MATCHES
+              </button>
+              <a href="/onboarding" className="btn-secondary" style={{ padding: '10px 20px', fontSize: '0.85rem', textDecoration: 'none' }}>
+                UPDATE MY SKILLS ⚡
+              </a>
+            </div>
           </div>
         ) : (
           <div className="match-cards-grid" style={{
