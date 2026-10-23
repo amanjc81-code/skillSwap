@@ -42,6 +42,8 @@ export const OnboardingPage = () => {
   const [isFetchingGoogle, setIsFetchingGoogle] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef(null);
+  const teachInputRef = useRef(null);
+  const learnInputRef = useRef(null);
 
   const [teachSkills, setTeachSkills] = useState(currentUser.teaching?.length ? currentUser.teaching : []);
   const [learnSkills, setLearnSkills] = useState(currentUser.learning?.length ? currentUser.learning : []);
@@ -51,7 +53,11 @@ export const OnboardingPage = () => {
 
   const handleAddCustomTeachSkill = (overrideSkill) => {
     const skillToAdd = (typeof overrideSkill === 'string' ? overrideSkill : teachSearch).trim();
-    if (!skillToAdd) return;
+    if (!skillToAdd) {
+      teachInputRef.current?.focus();
+      addToast('Please type your skill name first, then click + ADD! ✍️', 'info');
+      return;
+    }
 
     const alreadySelected = teachSkills.some(s => s.toLowerCase() === skillToAdd.toLowerCase());
     if (alreadySelected) {
@@ -70,7 +76,11 @@ export const OnboardingPage = () => {
 
   const handleAddCustomLearnSkill = (overrideSkill) => {
     const skillToAdd = (typeof overrideSkill === 'string' ? overrideSkill : learnSearch).trim();
-    if (!skillToAdd) return;
+    if (!skillToAdd) {
+      learnInputRef.current?.focus();
+      addToast('Please type your target quest first, then click + ADD! ✍️', 'info');
+      return;
+    }
 
     const alreadySelected = learnSkills.some(s => s.toLowerCase() === skillToAdd.toLowerCase());
     if (alreadySelected) {
@@ -623,21 +633,22 @@ export const OnboardingPage = () => {
             {/* STEP 3: Skills I Can Teach */}
             {step === 3 && (
               <div>
-                <span className="sticker-badge sticker-badge-exp" style={{ fontSize: '0.72rem', marginBottom: '8px' }}>
+                <span className="sticker-badge sticker-badge-gold" style={{ fontSize: '0.72rem', marginBottom: '8px' }}>
                   STEP 3 • YOUR SUPERPOWERS
                 </span>
                 <h2 style={{ fontFamily: 'var(--font-titan)', fontSize: '2.1rem', color: '#18181B', margin: '4px 0 6px 0' }}>
                   SKILLS I CAN TEACH
                 </h2>
-                <p style={{ fontFamily: 'var(--font-hand)', fontSize: '1.25rem', color: '#047857', fontWeight: 700, margin: '0 0 20px 0' }}>
+                <p style={{ fontFamily: 'var(--font-hand)', fontSize: '1.25rem', color: '#008744', fontWeight: 700, margin: '0 0 20px 0' }}>
                   Select at least 1 or 2 skills you feel comfortable guiding fellow students in ✍️
                 </p>
 
-                {/* Search & Custom Add Input */}
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                {/* Search & Custom Add Input Bar */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                   <div style={{ position: 'relative', flex: 1 }}>
-                    <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
+                    <Search size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
                     <input
+                      ref={teachInputRef}
                       type="text"
                       value={teachSearch}
                       onChange={e => setTeachSearch(e.target.value)}
@@ -647,36 +658,35 @@ export const OnboardingPage = () => {
                           handleAddCustomTeachSkill();
                         }
                       }}
-                      placeholder="Type any skill (e.g. dataStructure in c++, React, Python)..."
+                      placeholder="Search or add skill (e.g. dataStructure in c++, React, SQL)..."
                       className="scrapbook-input"
-                      style={{ paddingLeft: '40px', width: '100%', height: '46px' }}
+                      style={{ paddingLeft: '44px', width: '100%', height: '48px', fontSize: '0.95rem' }}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={() => handleAddCustomTeachSkill()}
-                    disabled={!teachSearch.trim()}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '6px',
+                      gap: '8px',
                       padding: '0 20px',
-                      height: '46px',
+                      height: '48px',
                       borderRadius: '8px',
                       border: '2px solid #18181B',
-                      background: teachSearch.trim() ? '#008744' : '#E4E4E7',
-                      color: teachSearch.trim() ? '#FFFFFF' : '#A1A1AA',
+                      background: '#008744',
+                      color: '#FFFFFF',
                       fontFamily: 'var(--font-titan)',
-                      fontSize: '0.88rem',
-                      cursor: teachSearch.trim() ? 'pointer' : 'not-allowed',
-                      boxShadow: teachSearch.trim() ? '0 3px 0 #005a2d' : 'none',
-                      transition: 'all 0.15s ease',
-                      whiteSpace: 'nowrap'
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      boxShadow: '0 3px 0 #005a2d',
+                      whiteSpace: 'nowrap',
+                      transition: 'transform 0.1s ease'
                     }}
-                    title="Click or press Enter to add skill"
+                    title="Click to add custom skill"
                   >
                     <Plus size={18} strokeWidth={3} />
-                    <span>+ ADD</span>
+                    <span>+ ADD SKILL</span>
                   </button>
                 </div>
 
@@ -728,7 +738,7 @@ export const OnboardingPage = () => {
                   </div>
                   {teachSkills.length === 0 ? (
                     <div style={{ fontSize: '0.85rem', color: '#71717A', fontStyle: 'italic' }}>
-                      No skills selected yet. Click any skill below to add!
+                      No skills selected yet. Click any skill below or type above to add!
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -758,10 +768,62 @@ export const OnboardingPage = () => {
 
                 {/* Available Chips */}
                 <div>
-                  <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-titan)', color: '#71717A', marginBottom: '8px' }}>
-                    POPULAR CAMPUS SKILLS
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-titan)', color: '#71717A' }}>
+                      POPULAR CAMPUS SKILLS {teachSearch.trim() ? '(FILTERED)' : ''}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (teachSearch.trim()) {
+                          handleAddCustomTeachSkill();
+                        } else {
+                          teachInputRef.current?.focus();
+                          addToast('Type your skill name above and click + ADD!', 'info');
+                        }
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        fontFamily: 'var(--font-titan)',
+                        fontSize: '0.78rem',
+                        color: '#008744',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <Plus size={13} strokeWidth={3} /> ADD EXTRA / OTHER SKILL
+                    </button>
                   </div>
+                  
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
+                    {/* Live custom skill chip if user is typing a skill that's not listed */}
+                    {teachSearch.trim() && !teachSkills.some(s => s.toLowerCase() === teachSearch.trim().toLowerCase()) && (
+                      <button
+                        type="button"
+                        onClick={() => handleAddCustomTeachSkill()}
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: '9999px',
+                          fontSize: '0.82rem',
+                          fontFamily: 'var(--font-titan)',
+                          background: '#008744',
+                          color: '#FFFFFF',
+                          border: '2px solid #005a2d',
+                          boxShadow: '0 2px 0 #005a2d',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <Plus size={14} strokeWidth={3} /> + ADD "{teachSearch.trim().toUpperCase()}"
+                      </button>
+                    )}
+
+                    {/* Predefined + Custom skills */}
                     {Array.from(new Set([...allSkillsList, ...customSkillsList]))
                       .filter(s => s.toLowerCase().includes(teachSearch.toLowerCase()) && !teachSkills.includes(s))
                       .map(s => (
@@ -784,6 +846,36 @@ export const OnboardingPage = () => {
                           + {s.toUpperCase()}
                         </button>
                       ))}
+
+                    {/* Dedicated Extra Skill Button Chip */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (teachSearch.trim()) {
+                          handleAddCustomTeachSkill();
+                        } else {
+                          teachInputRef.current?.focus();
+                          addToast('Type your skill name in the box above to add it! ✍️', 'info');
+                        }
+                      }}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '9999px',
+                        fontSize: '0.82rem',
+                        fontFamily: 'var(--font-titan)',
+                        background: '#FEF08A',
+                        color: '#854D0E',
+                        border: '2px dashed #CA8A04',
+                        boxShadow: '2px 2px 0px rgba(0,0,0,0.1)',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <Plus size={14} strokeWidth={3} /> + ADD OTHER SKILL
+                    </button>
+
                     {Array.from(new Set([...allSkillsList, ...customSkillsList]))
                       .filter(s => s.toLowerCase().includes(teachSearch.toLowerCase()) && !teachSkills.includes(s)).length === 0 && teachSearch.trim() && (
                       <div style={{
@@ -808,17 +900,17 @@ export const OnboardingPage = () => {
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '4px',
-                            padding: '5px 12px',
+                            padding: '6px 14px',
                             borderRadius: '6px',
                             background: '#008744',
                             color: '#FFFFFF',
                             fontFamily: 'var(--font-titan)',
-                            fontSize: '0.8rem',
+                            fontSize: '0.82rem',
                             border: '1px solid #005a2d',
                             cursor: 'pointer'
                           }}
                         >
-                          <Plus size={14} /> + ADD AS SKILL
+                          <Plus size={14} strokeWidth={3} /> + ADD AS SKILL
                         </button>
                       </div>
                     )}
@@ -840,11 +932,12 @@ export const OnboardingPage = () => {
                   What do you need help with right now? Our campus engine matches you with peer mentors ✍️
                 </p>
 
-                {/* Search & Custom Add Input */}
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                {/* Search & Custom Add Input Bar */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                   <div style={{ position: 'relative', flex: 1 }}>
-                    <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
+                    <Search size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#71717A' }} />
                     <input
+                      ref={learnInputRef}
                       type="text"
                       value={learnSearch}
                       onChange={e => setLearnSearch(e.target.value)}
@@ -854,36 +947,35 @@ export const OnboardingPage = () => {
                           handleAddCustomLearnSkill();
                         }
                       }}
-                      placeholder="Type any skill you want to learn (e.g. dataStructure in c++, Python, System Design)..."
+                      placeholder="Search or add skill (e.g. dataStructure in c++, Python, SQL)..."
                       className="scrapbook-input"
-                      style={{ paddingLeft: '40px', width: '100%', height: '46px' }}
+                      style={{ paddingLeft: '44px', width: '100%', height: '48px', fontSize: '0.95rem' }}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={() => handleAddCustomLearnSkill()}
-                    disabled={!learnSearch.trim()}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '6px',
+                      gap: '8px',
                       padding: '0 20px',
-                      height: '46px',
+                      height: '48px',
                       borderRadius: '8px',
                       border: '2px solid #18181B',
-                      background: learnSearch.trim() ? '#0284C7' : '#E4E4E7',
-                      color: learnSearch.trim() ? '#FFFFFF' : '#A1A1AA',
+                      background: '#0284C7',
+                      color: '#FFFFFF',
                       fontFamily: 'var(--font-titan)',
-                      fontSize: '0.88rem',
-                      cursor: learnSearch.trim() ? 'pointer' : 'not-allowed',
-                      boxShadow: learnSearch.trim() ? '0 3px 0 #075985' : 'none',
-                      transition: 'all 0.15s ease',
-                      whiteSpace: 'nowrap'
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      boxShadow: '0 3px 0 #075985',
+                      whiteSpace: 'nowrap',
+                      transition: 'transform 0.1s ease'
                     }}
-                    title="Click or press Enter to add target skill"
+                    title="Click to add custom learning goal"
                   >
                     <Plus size={18} strokeWidth={3} />
-                    <span>+ ADD</span>
+                    <span>+ ADD SKILL</span>
                   </button>
                 </div>
 
@@ -935,7 +1027,7 @@ export const OnboardingPage = () => {
                   </div>
                   {learnSkills.length === 0 ? (
                     <div style={{ fontSize: '0.85rem', color: '#71717A', fontStyle: 'italic' }}>
-                      No skills selected yet. Click any skill below to add!
+                      No skills selected yet. Click any skill below or type above to add!
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -965,10 +1057,62 @@ export const OnboardingPage = () => {
 
                 {/* Available Chips */}
                 <div>
-                  <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-titan)', color: '#71717A', marginBottom: '8px' }}>
-                    TRENDING SKILLS TO LEARN
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-titan)', color: '#71717A' }}>
+                      TRENDING SKILLS TO LEARN {learnSearch.trim() ? '(FILTERED)' : ''}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (learnSearch.trim()) {
+                          handleAddCustomLearnSkill();
+                        } else {
+                          learnInputRef.current?.focus();
+                          addToast('Type your target quest above and click + ADD!', 'info');
+                        }
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        fontFamily: 'var(--font-titan)',
+                        fontSize: '0.78rem',
+                        color: '#0284C7',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <Plus size={13} strokeWidth={3} /> ADD EXTRA / OTHER SKILL
+                    </button>
                   </div>
+
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
+                    {/* Live custom skill chip if user typed a skill (e.g. mghjvmg or dataStructure in c++) */}
+                    {learnSearch.trim() && !learnSkills.some(s => s.toLowerCase() === learnSearch.trim().toLowerCase()) && (
+                      <button
+                        type="button"
+                        onClick={() => handleAddCustomLearnSkill()}
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: '9999px',
+                          fontSize: '0.82rem',
+                          fontFamily: 'var(--font-titan)',
+                          background: '#0284C7',
+                          color: '#FFFFFF',
+                          border: '2px solid #075985',
+                          boxShadow: '0 2px 0 #075985',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <Plus size={14} strokeWidth={3} /> + ADD "{learnSearch.trim().toUpperCase()}"
+                      </button>
+                    )}
+
+                    {/* Predefined + Custom skills */}
                     {Array.from(new Set([...allSkillsList, ...customSkillsList]))
                       .filter(s => s.toLowerCase().includes(learnSearch.toLowerCase()) && !learnSkills.includes(s))
                       .map(s => (
@@ -991,6 +1135,36 @@ export const OnboardingPage = () => {
                           + {s.toUpperCase()}
                         </button>
                       ))}
+
+                    {/* Dedicated Extra Skill Button Chip */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (learnSearch.trim()) {
+                          handleAddCustomLearnSkill();
+                        } else {
+                          learnInputRef.current?.focus();
+                          addToast('Type your target quest in the box above to add it! ✍️', 'info');
+                        }
+                      }}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '9999px',
+                        fontSize: '0.82rem',
+                        fontFamily: 'var(--font-titan)',
+                        background: '#E0F2FE',
+                        color: '#0369A1',
+                        border: '2px dashed #0284C7',
+                        boxShadow: '2px 2px 0px rgba(0,0,0,0.1)',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <Plus size={14} strokeWidth={3} /> + ADD OTHER SKILL
+                    </button>
+
                     {Array.from(new Set([...allSkillsList, ...customSkillsList]))
                       .filter(s => s.toLowerCase().includes(learnSearch.toLowerCase()) && !learnSkills.includes(s)).length === 0 && learnSearch.trim() && (
                       <div style={{
@@ -1007,7 +1181,7 @@ export const OnboardingPage = () => {
                         flexWrap: 'wrap',
                         gap: '10px'
                       }}>
-                        <span>"{learnSearch.trim()}" is not in popular skills. You can still add it!</span>
+                        <span>"{learnSearch.trim()}" is not in trending skills. You can still add it!</span>
                         <button
                           type="button"
                           onClick={() => handleAddCustomLearnSkill()}
@@ -1015,17 +1189,17 @@ export const OnboardingPage = () => {
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '4px',
-                            padding: '5px 12px',
+                            padding: '6px 14px',
                             borderRadius: '6px',
                             background: '#0284C7',
                             color: '#FFFFFF',
                             fontFamily: 'var(--font-titan)',
-                            fontSize: '0.8rem',
+                            fontSize: '0.82rem',
                             border: '1px solid #075985',
                             cursor: 'pointer'
                           }}
                         >
-                          <Plus size={14} /> + ADD AS SKILL
+                          <Plus size={14} strokeWidth={3} /> + ADD AS SKILL
                         </button>
                       </div>
                     )}
