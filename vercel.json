@@ -13,15 +13,34 @@
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/:path*",
       "destination": {
         "service": "server"
       }
     },
     {
-      "source": "/(.*)",
+      "source": "/assets/:path*",
       "destination": {
         "service": "client"
+      }
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": {
+        "service": "client"
+      }
+    },
+    {
+      "source": "/logo.svg",
+      "destination": {
+        "service": "client"
+      }
+    },
+    {
+      "source": "/:path*",
+      "destination": {
+        "service": "client",
+        "path": "/index.html"
       }
     }
   ]
