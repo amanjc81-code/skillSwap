@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../app/AuthContext.jsx';
-import { Share2, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
+import { CrazyLogo } from './common/CrazyLogo.jsx';
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -30,22 +31,9 @@ export const Navbar = () => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-        <Link to={isAuthenticated ? '/dashboard' : '/'} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-          <div
-            style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
-              backgroundColor: 'var(--accent-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF'
-            }}
-          >
-            <Share2 size={17} />
-          </div>
-          <span style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text-primary)' }}>
+        <Link to={isAuthenticated ? '/dashboard' : '/'} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
+          <CrazyLogo size={36} />
+          <span style={{ fontSize: '1.2rem', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text-primary)' }}>
             Skill<span style={{ color: 'var(--accent-primary)' }}>Mesh</span>
           </span>
           <span className="badge badge-indigo" style={{ fontSize: '0.65rem', marginLeft: '0.2rem' }}>

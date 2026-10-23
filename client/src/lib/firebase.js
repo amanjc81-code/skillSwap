@@ -151,6 +151,8 @@ export const formatFirebaseError = (error) => {
       return 'Google sign-in popup was closed before completion.';
     case 'auth/popup-blocked':
       return 'Sign-in popup was blocked by your browser. Please allow popups for this site.';
+    case 'auth/unauthorized-domain':
+      return 'Unauthorized Domain: The current domain is not authorized in Firebase Console. Please add it under Authentication > Settings > Authorized Domains.';
     case 'auth/network-request-failed':
       return 'Network error connecting to Firebase. Please check your internet connection.';
     default:

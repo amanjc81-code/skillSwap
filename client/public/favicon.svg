@@ -1,0 +1,230 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <!-- Warm Creamy Paper Background Gradient -->
+    <radialGradient id="warmStickerBg" cx="40%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#FFFDF9" />
+      <stop offset="65%" stop-color="#FFF4E6" />
+      <stop offset="100%" stop-color="#FDE8D0" />
+    </radialGradient>
+
+    <!-- Warm Cardboard Kraft Gradients -->
+    <linearGradient id="kraftFace" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#FDF0DB" />
+      <stop offset="35%" stop-color="#F5D4A4" />
+      <stop offset="85%" stop-color="#E2B77C" />
+      <stop offset="100%" stop-color="#D19E5D" />
+    </linearGradient>
+
+    <linearGradient id="kraftInner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C58E4F" />
+      <stop offset="100%" stop-color="#DEAA6D" />
+    </linearGradient>
+
+    <!-- Warm Blush Radial Gradient -->
+    <radialGradient id="blushGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF758F" stop-opacity="0.85" />
+      <stop offset="70%" stop-color="#FF9EAA" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#FFA8B6" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Fresh Learning Sprout Gradient -->
+    <linearGradient id="sproutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#86EFAC" />
+      <stop offset="60%" stop-color="#22C55E" />
+      <stop offset="100%" stop-color="#15803D" />
+    </linearGradient>
+
+    <style>
+      @keyframes gentleBob {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-2.5px) rotate(1deg); }
+      }
+      @keyframes sproutSway {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(7deg); }
+      }
+      .anim-mascot {
+        transform-origin: 64px 80px;
+        animation: gentleBob 3.5s ease-in-out infinite;
+      }
+      .anim-sprout {
+        transform-origin: 64px 34px;
+        animation: sproutSway 3s ease-in-out infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- 1. Soft Warm Die-Cut Sticker Card -->
+  <!-- Tactile Cast Drop Shadow -->
+  <rect x="8" y="11" width="112" height="110" rx="36" fill="#E8D1BE" opacity="0.75" />
+  
+  <!-- Sticker Body -->
+  <rect x="8" y="8" width="112" height="110" rx="36" fill="url(#warmStickerBg)" stroke="#F3DEC8" stroke-width="2.5" />
+
+  <!-- Doodled Warm Accents in Background -->
+  <!-- Honey Sparkle Star Top Right -->
+  <path
+    d="M 104 22 C 104 26 106 28 110 28 C 106 28 104 30 104 34 C 104 30 102 28 98 28 C 102 28 104 26 104 22 Z"
+    fill="#F59E0B"
+  />
+  <!-- Mint Dot Sparkle Top Left -->
+  <circle cx="20" cy="30" r="2.5" fill="#10B981" opacity="0.8" />
+  <!-- Pastel Coral Mini-Heart Bottom Left -->
+  <path
+    d="M 21 95 C 19 93 17 95 17 97 C 17 99 21 102 21 102 C 21 102 25 99 25 97 C 25 95 23 93 21 95 Z"
+    fill="#FB7185"
+    opacity="0.85"
+  />
+
+  <!-- 2. The Mascot: Cute Warm Card-Head Student -->
+  <g class="anim-mascot">
+
+    <!-- Cardboard Box Folded Ear Flaps (Left & Right) -->
+    <!-- Left Flap / Box Ear -->
+    <polygon points="34,44 15,22 45,31 49,44" fill="url(#kraftInner)" stroke="#381E11" stroke-width="3" stroke-linejoin="round" />
+    <polygon points="32,43 17,24 43,32" fill="#E7B87E" />
+
+    <!-- Right Flap / Box Ear -->
+    <polygon points="94,44 113,22 83,31 79,44" fill="url(#kraftInner)" stroke="#381E11" stroke-width="3" stroke-linejoin="round" />
+    <polygon points="96,43 111,24 85,32" fill="#E7B87E" />
+
+    <!-- The Learning Sprout 🌱 growing from the top flap! -->
+    <g class="anim-sprout">
+      <!-- Curved Stem -->
+      <path
+        d="M 64 35 C 64 24 61 17 67 11"
+        fill="none"
+        stroke="#15803D"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <!-- Left Sprout Leaf -->
+      <path
+        d="M 65 17 C 53 16 51 29 65 25 Z"
+        fill="url(#sproutGrad)"
+        stroke="#15803D"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+      <!-- Right Sprout Leaf -->
+      <path
+        d="M 67 13 C 79 11 82 23 68 21 Z"
+        fill="url(#sproutGrad)"
+        stroke="#15803D"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+      <!-- Leaf highlights -->
+      <path d="M 64 20 Q 59 21 57 24" fill="none" stroke="#BBF7D0" stroke-width="1" stroke-linecap="round" />
+    </g>
+
+    <!-- Main Cardboard Box Head -->
+    <rect
+      x="27"
+      y="40"
+      width="74"
+      height="58"
+      rx="14"
+      fill="url(#kraftFace)"
+      stroke="#381E11"
+      stroke-width="3.5"
+      stroke-linejoin="round"
+    />
+
+    <!-- Cardboard Crease Line at Top (subtle box fold depth) -->
+    <path d="M 33 46 L 95 46" stroke="#D19E5D" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+
+    <!-- Cute Pastel Mint Washi Tape Strip on Forehead / Ear -->
+    <g>
+      <polygon
+        points="75,32 97,24 100,34 78,42"
+        fill="#A7F3D0"
+        stroke="#381E11"
+        stroke-width="2.2"
+        stroke-linejoin="round"
+      />
+      <!-- Washi Tape Dashed Stitches -->
+      <line
+        x1="78"
+        y1="37"
+        x2="97"
+        y2="29"
+        stroke="#059669"
+        stroke-width="1.8"
+        stroke-dasharray="2 3"
+        stroke-linecap="round"
+      />
+    </g>
+
+    <!-- Sweet Kawaii Blush Cheeks -->
+    <circle cx="41" cy="73" r="8" fill="url(#blushGlow)" />
+    <circle cx="87" cy="73" r="8" fill="url(#blushGlow)" />
+
+    <!-- Big Sparkling Kawaii Eyes -->
+    <!-- Left Eye -->
+    <g>
+      <ellipse cx="49" cy="65" rx="5.5" ry="7" fill="#381E11" />
+      <!-- Main Gloss Catchlight -->
+      <circle cx="47.2" cy="62.5" r="2.6" fill="#FFFFFF" />
+      <!-- Secondary Mini Sparkle -->
+      <circle cx="51.2" cy="67.5" r="1.3" fill="#FFFFFF" />
+    </g>
+
+    <!-- Right Eye -->
+    <g>
+      <ellipse cx="79" cy="65" rx="5.5" ry="7" fill="#381E11" />
+      <!-- Main Gloss Catchlight -->
+      <circle cx="77.2" cy="62.5" r="2.6" fill="#FFFFFF" />
+      <!-- Secondary Mini Sparkle -->
+      <circle cx="81.2" cy="67.5" r="1.3" fill="#FFFFFF" />
+    </g>
+
+    <!-- Adorable Cheerful Smile (with cute tongue) -->
+    <path
+      d="M 58 70 Q 64 77 70 70 Q 64 83 58 70 Z"
+      fill="#E11D48"
+      stroke="#381E11"
+      stroke-width="2.6"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    />
+    <!-- Tiny Pink Tongue -->
+    <path
+      d="M 60 75 Q 64 72 68 75 Q 64 80 60 75 Z"
+      fill="#FDA4AF"
+    />
+
+    <!-- Tiny Warm Doodle Heart Tattoo on Corner (representing skill love) -->
+    <path
+      d="M 37 84 C 35.5 82.5 33 83.5 33 85 C 33 87 37 89.5 37 89.5 C 37 89.5 41 87 41 85 C 41 83.5 38.5 82.5 37 84 Z"
+      fill="#F43F5E"
+      opacity="0.9"
+    />
+
+    <!-- Cute Cardboard Paws Peeking at Bottom -->
+    <!-- Left Paw -->
+    <rect
+      x="39"
+      y="92"
+      width="13"
+      height="10"
+      rx="5"
+      fill="#F5D4A4"
+      stroke="#381E11"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+    <!-- Right Paw -->
+    <rect
+      x="76"
+      y="92"
+      width="13"
+      height="10"
+      rx="5"
+      fill="#F5D4A4"
+      stroke="#381E11"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

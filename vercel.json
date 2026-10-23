@@ -19,9 +19,31 @@
       }
     },
     {
+      "source": "/assets/(.*)",
+      "destination": {
+        "service": "client",
+        "path": "/assets/$1"
+      }
+    },
+    {
+      "source": "/(favicon\.svg|logo\.svg|favicon\.ico|robots\.txt|sitemap\.xml)",
+      "destination": {
+        "service": "client",
+        "path": "/$1"
+      }
+    },
+    {
+      "source": "/(.*\.[a-zA-Z0-9]+)$",
+      "destination": {
+        "service": "client",
+        "path": "/$1"
+      }
+    },
+    {
       "source": "/(.*)",
       "destination": {
-        "service": "client"
+        "service": "client",
+        "path": "/index.html"
       }
     }
   ]

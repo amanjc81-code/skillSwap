@@ -1,3 +1,4 @@
+import os from 'os';
 import mongoose from 'mongoose';
 import { env } from './env.js';
 import { logger } from '../utils/logger.js';
@@ -7,7 +8,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-process.env.MONGOMS_DOWNLOAD_DIR = path.resolve(__dirname, '../../node_modules/.cache/mongodb-binaries');
+process.env.MONGOMS_DOWNLOAD_DIR = process.env.VERCEL ? path.join(os.tmpdir(), 'mongodb-binaries') : path.resolve(__dirname, '../../node_modules/.cache/mongodb-binaries');
 
 let mongod = null;
 
