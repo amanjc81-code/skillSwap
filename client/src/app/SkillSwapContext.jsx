@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { subscribeToStudentsFromFirestore } from '../lib/firebase.js';
 import { BASE_URL } from '../lib/api.js';
 
 const SkillSwapContext = createContext(null);
@@ -197,18 +198,25 @@ export const SkillSwapProvider = ({ children }) => {
   }, [currentUser]);
 
   // Student directory for 1-to-1 matching and profiles (Initialized with rich campus demo templates)
-  const [students, setStudents] = useState(() => {
-    try {
-      const saved = localStorage.getItem('skillswap_students');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  const [students, setStudents] = useState([]);
+  // Load real students from Firestore; fallback to demo if none
+  useEffect(() => {
+    const unsubscribe = subscribeToStudentsFromFirestore((liveStudents) => {
+      if (liveStudents && liveStudents.length > 0) {
+        setStudents(liveStudents);
+      } else {
+        // If no real students, load demo data
+        setStudents(INITIAL_DEMO_STUDENTS);
+        try {
+          localStorage.setItem('skillswap_students', JSON.stringify(INITIAL_DEMO_STUDENTS));
+        } catch (e) {
+          console.error(e);
+        }
+    
       }
-    } catch (e) {
-      console.error(e);
-    }
-    return INITIAL_DEMO_STUDENTS;
-  });
+    });
+    return () => unsubscribe && unsubscribe();
+  }, []);
 
   const resetStudentsToDemo = () => {
     setStudents(INITIAL_DEMO_STUDENTS);

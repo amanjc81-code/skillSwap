@@ -13,6 +13,11 @@ import {
   doc,
   setDoc,
   getDoc,
+  getDocs,
+  collection,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
   serverTimestamp
 } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
@@ -159,3 +164,110 @@ export const formatFirebaseError = (error) => {
       return error.message || 'Authentication failed. Please try again.';
   }
 };
+
+/**
+ * Save / Update student profile to Firestore for real-time peer matching
+ */
+export const saveStudentToFirestore = async (studentData) => {
+  if (!studentData || (!studentData.id && !studentData.email)) return false;
+  try {
+    const docId = studentData.id || `student-${studentData.email.replace(/[^a-zA-Z0-9]/g, '_')}`;
+    const studentRef = doc(db, 'students', docId);
+    const payload = {
+      ...studentData,
+      id: docId,
+      isRealUser: true,
+      isDemo: false,
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(studentRef, payload, { merge: true });
+    return true;
+  } catch (err) {
+    console.warn('Note: Cloud Firestore save student error:', err.message);
+    return false;
+  }
+};
+
+/**
+ * Subscribe to all real registered students from Firestore in real time
+ */
+export const subscribeToStudentsFromFirestore = (callback) => {
+  try {
+    const studentsCol = collection(db, 'students');
+    return onSnapshot(studentsCol, (snapshot) => {
+      const liveStudents = [];
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        liveStudents.push({
+          ...data,
+          id: docSnap.id
+        });
+      });
+      callback(liveStudents);
+    }, (error) => {
+      console.warn('Firestore live students listener error:', error.message);
+    });
+  } catch (err) {
+    console.warn('Failed to subscribe to Firestore students:', err.message);
+    return () => {};
+  }
+};
+
+/**
+ * Save swap request in Firestore for real-time delivery
+ */
+export const saveSwapRequestToFirestore = async (requestData) => {
+  if (!requestData?.id) return false;
+  try {
+    const reqRef = doc(db, 'swap_requests', requestData.id);
+    await setDoc(reqRef, {
+      ...requestData,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    return true;
+  } catch (err) {
+    console.warn('Note: Could not save swap request to Firestore:', err.message);
+    return false;
+  }
+};
+
+/**
+ * Subscribe to real-time swap requests
+ */
+export const subscribeToSwapRequestsFromFirestore = (userIdOrEmail, callback) => {
+  if (!userIdOrEmail) return () => {};
+  try {
+    const reqCol = collection(db, 'swap_requests');
+    return onSnapshot(reqCol, (snapshot) => {
+      const requests = [];
+      snapshot.forEach((d) => {
+        const item = d.data();
+        requests.push({ ...item, id: d.id });
+      });
+      callback(requests);
+    }, (err) => {
+      console.warn('Firestore swap requests listener error:', err.message);
+    });
+  } catch (e) {
+    return () => {};
+  }
+};
+
+/**
+ * Update status of swap request in Firestore
+ */
+export const updateSwapRequestInFirestore = async (requestId, status) => {
+  if (!requestId) return false;
+  try {
+    const reqRef = doc(db, 'swap_requests', requestId);
+    await updateDoc(reqRef, {
+      status,
+      updatedAt: serverTimestamp()
+    });
+    return true;
+  } catch (err) {
+    console.warn('Could not update swap request status in Firestore:', err.message);
+    return false;
+  }
+};
+

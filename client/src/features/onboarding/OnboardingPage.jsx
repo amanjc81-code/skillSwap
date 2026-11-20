@@ -21,7 +21,7 @@ import {
   ShieldCheck,
   Image as ImageIcon
 } from 'lucide-react';
-import { firebaseLoginWithGoogle, formatFirebaseError } from '../../lib/firebase.js';
+import { firebaseLoginWithGoogle, formatFirebaseError, saveStudentToFirestore } from '../../lib/firebase.js';
 
 export const OnboardingPage = () => {
   const navigate = useNavigate();
@@ -193,7 +193,7 @@ export const OnboardingPage = () => {
     );
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 1) {
       if (!name.trim()) {
         addToast('Please enter your display name to continue.', 'error');
@@ -242,7 +242,8 @@ export const OnboardingPage = () => {
       };
       setCurrentUser(updatedUser);
       addToast('Profile passport complete! Welcome to SkillSwap 🔥', 'success');
-      navigate('/dashboard');
+      await saveStudentToFirestore(updatedUser);
+        navigate('/dashboard');
     }
   };
 
